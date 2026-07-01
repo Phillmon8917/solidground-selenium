@@ -17,6 +17,8 @@ public class NetworkValidationActions {
      * Creates the network validation actions and starts recording network
      * traffic for the given driver. Expects a WebDriver backed by Chrome,
      * since network recording relies on Chrome's DevTools protocol.
+     *
+     * @param driver the Chrome-backed WebDriver to record network traffic for
      */
     public NetworkValidationActions(WebDriver driver) {
         this.validator = new NetworkResponseValidator(driver);
@@ -27,6 +29,8 @@ public class NetworkValidationActions {
      * described in the given options actually arrived with the expected
      * status and, if configured, body. Expects a CoordinationOptions
      * describing the actions and the responses to wait for.
+     *
+     * @param options the actions to run and the responses to wait for
      */
     public void coordinateActionsAndResponses(CoordinationOptions options) {
         validator.validateActionsAndResponses(options.getActions(), options.getWaitForResponses(), options.getTimeout());
@@ -39,6 +43,8 @@ public class NetworkValidationActions {
      * not show up right away. Expects a SubmitAndFetchOptions describing
      * the actions, the expected submit and fetch responses, and the
      * timing to use.
+     *
+     * @param options the actions, expected responses, and timing to coordinate
      */
     public void coordinateSubmitAndFetchWithReloadRecovery(SubmitAndFetchOptions options) {
         validator.validateSubmitAndFetch(

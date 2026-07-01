@@ -24,6 +24,8 @@ public class ResponseExpectation {
      * Creates an expectation for any response whose url contains the
      * given text, with no restriction on method or status. Expects a
      * non-blank url fragment to match against.
+     *
+     * @param url the url fragment the response must contain
      */
     public ResponseExpectation(String url) {
         this(url, null, null, null, null);
@@ -33,6 +35,9 @@ public class ResponseExpectation {
      * Creates an expectation for a response matching both the url and the
      * HTTP method. Expects a non-blank url fragment and the HTTP method
      * the request should use, such as "GET" or "POST".
+     *
+     * @param url    the url fragment the response must contain
+     * @param method the HTTP method the request should use, such as "GET" or "POST"
      */
     public ResponseExpectation(String url, String method) {
         this(url, method, null, null, null);
@@ -42,6 +47,10 @@ public class ResponseExpectation {
      * Creates an expectation for a response matching the url, method, and
      * a single expected status code. Expects a non-blank url fragment,
      * the HTTP method, and the status code the response must have.
+     *
+     * @param url    the url fragment the response must contain
+     * @param method the HTTP method the request should use, such as "GET" or "POST"
+     * @param status the status code the response must have
      */
     public ResponseExpectation(String url, String method, Integer status) {
         this(url, method, status, null, null);
@@ -52,6 +61,10 @@ public class ResponseExpectation {
      * where the status must be one of several acceptable codes. Expects a
      * non-blank url fragment, the HTTP method, and the list of status
      * codes that are all considered acceptable.
+     *
+     * @param url              the url fragment the response must contain
+     * @param method           the HTTP method the request should use, such as "GET" or "POST"
+     * @param expectedStatuses the list of status codes that are all considered acceptable
      */
     public ResponseExpectation(String url, String method, List<Integer> expectedStatuses) {
         this(url, method, null, expectedStatuses, null);
@@ -79,6 +92,11 @@ public class ResponseExpectation {
      * codes. Expects a non-blank url, the HTTP method, and at least one
      * status code. Throws an InvalidNetworkExpectationException if no
      * status codes are given.
+     *
+     * @param url      the url fragment the response must contain
+     * @param method   the HTTP method the request should use, such as "GET" or "POST"
+     * @param statuses the status codes to build one expectation each for; at least one must be given
+     * @return one ResponseExpectation per given status code, all matching the same url and method
      */
     public static List<ResponseExpectation> forStatuses(String url, String method, Integer... statuses) {
         if (statuses == null || statuses.length == 0) {
@@ -94,6 +112,9 @@ public class ResponseExpectation {
      * so the response body is checked as well as the url, method, and
      * status. Expects a predicate that returns true when the response
      * body text is acceptable.
+     *
+     * @param bodyValidator predicate that returns true when the response body text is acceptable
+     * @return a copy of this expectation with the given body validator attached
      */
     public ResponseExpectation withBodyValidator(Predicate<String> bodyValidator) {
         return new ResponseExpectation(this.url, this.method, this.status, this.expectedStatuses, bodyValidator);
@@ -101,6 +122,8 @@ public class ResponseExpectation {
 
     /**
      * Returns the url fragment this expectation matches against.
+     *
+     * @return the url fragment this expectation matches against
      */
     public String getUrl() {
         return url;
@@ -109,6 +132,8 @@ public class ResponseExpectation {
     /**
      * Returns the HTTP method this expectation requires, or null if any
      * method is acceptable.
+     *
+     * @return the HTTP method this expectation requires, or null if any method is acceptable
      */
     public String getMethod() {
         return method;
@@ -118,6 +143,8 @@ public class ResponseExpectation {
      * Returns the single status code this expectation requires, or null
      * if a list of statuses was used instead, or if no status was
      * specified at all.
+     *
+     * @return the single status code this expectation requires, or null if not applicable
      */
     public Integer getStatus() {
         return status;
@@ -127,6 +154,8 @@ public class ResponseExpectation {
      * Returns the list of acceptable status codes for this expectation,
      * or null if a single status was used instead, or if no status was
      * specified at all.
+     *
+     * @return the list of acceptable status codes for this expectation, or null if not applicable
      */
     public List<Integer> getExpectedStatuses() {
         return expectedStatuses;
@@ -135,6 +164,8 @@ public class ResponseExpectation {
     /**
      * Returns the predicate used to check the response body, or null if
      * this expectation does not check the body.
+     *
+     * @return the predicate used to check the response body, or null if this expectation does not check the body
      */
     public Predicate<String> getBodyValidator() {
         return bodyValidator;
@@ -143,6 +174,8 @@ public class ResponseExpectation {
     /**
      * Returns whether a body validator has been attached to this
      * expectation.
+     *
+     * @return true if a body validator has been attached to this expectation, false otherwise
      */
     public boolean hasBodyValidator() {
         return bodyValidator != null;
@@ -151,6 +184,8 @@ public class ResponseExpectation {
     /**
      * Returns a readable summary of this expectation's url, method, and
      * status, used in log messages and exceptions.
+     *
+     * @return a readable summary of this expectation's url, method, and status
      */
     @Override
     public String toString() {

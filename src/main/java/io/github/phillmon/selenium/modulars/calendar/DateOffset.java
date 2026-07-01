@@ -16,6 +16,9 @@ public final class DateOffset {
      * Returns the date that is the given number of days away from today.
      * Expects the number of days to add, which can be negative to get a
      * date in the past.
+     *
+     * @param offsetDays the number of days to add to today's date, may be negative
+     * @return the resulting date as a DateObject
      */
     public static DateObject resolve(int offsetDays) {
         LocalDate target = LocalDate.now().plusDays(offsetDays);
@@ -24,6 +27,8 @@ public final class DateOffset {
 
     /**
      * Returns today's date as a DateObject.
+     *
+     * @return today's date as a DateObject
      */
     public static DateObject today() {
         return resolve(0);

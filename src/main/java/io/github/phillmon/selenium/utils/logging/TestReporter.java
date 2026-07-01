@@ -10,22 +10,31 @@ package io.github.phillmon.selenium.utils.logging;
 public interface TestReporter {
     /**
      * Records an informational message.
+     *
+     * @param message the message to record
      */
     void info(String message);
 
     /**
      * Records a warning message.
+     *
+     * @param message the message to record
      */
     void warning(String message);
 
     /**
      * Records an error message with no associated exception.
+     *
+     * @param message the message to record
      */
     void error(String message);
 
     /**
      * Records an error message together with the exception that caused
      * it.
+     *
+     * @param message   the message to record
+     * @param throwable the exception that caused the error
      */
     void error(String message, Throwable throwable);
 }

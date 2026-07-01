@@ -26,6 +26,8 @@ public class SelectDropdownActions {
     /**
      * Creates the dropdown actions using a default timeout of 10 seconds.
      * Expects the WebDriver for the current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public SelectDropdownActions(WebDriver driver) {
         this(driver, Duration.ofSeconds(10));
@@ -35,6 +37,9 @@ public class SelectDropdownActions {
      * Creates the dropdown actions with a custom timeout. Expects the
      * WebDriver for the current browser session and how long to wait for
      * the dropdown to become visible.
+     *
+     * @param driver  the WebDriver for the current browser session
+     * @param timeout how long to wait for the dropdown to become visible
      */
     public SelectDropdownActions(WebDriver driver, Duration timeout) {
         this.driver = driver;
@@ -48,6 +53,11 @@ public class SelectDropdownActions {
      * calling method. Throws a DropdownActionException if no option with
      * that text exists, and includes the list of available options in the
      * error to help diagnose the problem.
+     *
+     * @param locator     the locator for the dropdown
+     * @param visibleText the visible text of the option to select
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void selectByVisibleText(By locator, String visibleText, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -69,6 +79,11 @@ public class SelectDropdownActions {
      * name for the dropdown for logging, and the name of the calling
      * method. Throws a DropdownActionException if no option with that
      * value exists.
+     *
+     * @param locator     the locator for the dropdown
+     * @param value       the value attribute to match
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void selectByValue(By locator, String value, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -90,6 +105,11 @@ public class SelectDropdownActions {
      * name of the calling method. Throws a DropdownActionException if the
      * index does not match any option, and includes the total number of
      * options in the error.
+     *
+     * @param locator     the locator for the dropdown
+     * @param index       the zero-based index of the option to select
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void selectByIndex(By locator, int index, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -112,6 +132,11 @@ public class SelectDropdownActions {
      * readable name for the dropdown for logging, and the name of the
      * calling method. Throws a DropdownActionException if no option
      * contains that text.
+     *
+     * @param locator     the locator for the dropdown
+     * @param partialText the partial text to search for
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void selectByVisibleTextContains(By locator, String partialText, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -133,6 +158,11 @@ public class SelectDropdownActions {
      * the visible text of the option to deselect, a readable name for the
      * dropdown for logging, and the name of the calling method. Throws a
      * DropdownActionException if the dropdown is not a multi-select.
+     *
+     * @param locator     the locator for the dropdown
+     * @param visibleText the visible text of the option to deselect
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void deselectByVisibleText(By locator, String visibleText, String elementName, String methodName) {
         Select select = resolveMultiSelect(locator, elementName, methodName);
@@ -147,6 +177,11 @@ public class SelectDropdownActions {
      * dropdown, the value attribute to deselect, a readable name for the
      * dropdown for logging, and the name of the calling method. Throws a
      * DropdownActionException if the dropdown is not a multi-select.
+     *
+     * @param locator     the locator for the dropdown
+     * @param value       the value attribute to deselect
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void deselectByValue(By locator, String value, String elementName, String methodName) {
         Select select = resolveMultiSelect(locator, elementName, methodName);
@@ -161,6 +196,11 @@ public class SelectDropdownActions {
      * zero-based index to deselect, a readable name for the dropdown for
      * logging, and the name of the calling method. Throws a
      * DropdownActionException if the dropdown is not a multi-select.
+     *
+     * @param locator     the locator for the dropdown
+     * @param index       the zero-based index of the option to deselect
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void deselectByIndex(By locator, int index, String elementName, String methodName) {
         Select select = resolveMultiSelect(locator, elementName, methodName);
@@ -174,6 +214,10 @@ public class SelectDropdownActions {
      * the locator for the dropdown, a readable name for the dropdown for
      * logging, and the name of the calling method. Throws a
      * DropdownActionException if the dropdown is not a multi-select.
+     *
+     * @param locator     the locator for the dropdown
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void deselectAll(By locator, String elementName, String methodName) {
         Select select = resolveMultiSelect(locator, elementName, methodName);
@@ -185,6 +229,11 @@ public class SelectDropdownActions {
      * Returns the visible text of the first currently selected option.
      * Expects the locator for the dropdown, a readable name for the
      * dropdown for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the dropdown
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the visible text of the first currently selected option
      */
     public String getSelectedOptionText(By locator, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -198,6 +247,11 @@ public class SelectDropdownActions {
      * Returns the value attribute of the first currently selected option.
      * Expects the locator for the dropdown, a readable name for the
      * dropdown for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the dropdown
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the value attribute of the first currently selected option
      */
     public String getSelectedOptionValue(By locator, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -213,6 +267,11 @@ public class SelectDropdownActions {
      * readable name for the dropdown for logging, and the name of the
      * calling method. Throws a DropdownActionException if the dropdown is
      * not a multi-select.
+     *
+     * @param locator     the locator for the dropdown
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the visible text of every option currently selected
      */
     public List<String> getAllSelectedOptionsText(By locator, String elementName, String methodName) {
         Select select = resolveMultiSelect(locator, elementName, methodName);
@@ -229,6 +288,11 @@ public class SelectDropdownActions {
      * regardless of which ones are selected. Expects the locator for the
      * dropdown, a readable name for the dropdown for logging, and the
      * name of the calling method.
+     *
+     * @param locator     the locator for the dropdown
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the visible text of every option the dropdown has
      */
     public List<String> getAllOptionsText(By locator, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -244,6 +308,11 @@ public class SelectDropdownActions {
      * Returns how many options the dropdown has in total. Expects the
      * locator for the dropdown, a readable name for the dropdown for
      * logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the dropdown
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return how many options the dropdown has in total
      */
     public int getOptionsCount(By locator, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -258,6 +327,11 @@ public class SelectDropdownActions {
      * selected at once. Expects the locator for the dropdown, a readable
      * name for the dropdown for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the dropdown
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return whether the dropdown allows more than one option to be selected at once
      */
     public boolean isMultiple(By locator, String elementName, String methodName) {
         Select select = resolveSelect(locator, elementName, methodName);
@@ -272,6 +346,12 @@ public class SelectDropdownActions {
      * text. Expects the locator for the dropdown, the visible text to
      * look for, a readable name for the dropdown for logging, and the
      * name of the calling method.
+     *
+     * @param locator     the locator for the dropdown
+     * @param visibleText the visible text to look for
+     * @param elementName a readable name for the dropdown, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return whether the dropdown has an option with the given visible text
      */
     public boolean hasOptionWithText(By locator, String visibleText, String elementName, String methodName) {
         boolean found = getAllOptionsText(locator, elementName, methodName).contains(visibleText);

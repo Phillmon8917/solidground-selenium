@@ -9,6 +9,8 @@ public class InvalidCalendarConfigurationException extends IllegalStateException
     /**
      * Creates the exception with a message describing which part of the
      * calendar configuration is missing or invalid.
+     *
+     * @param message description of which part of the calendar configuration is missing or invalid
      */
     public InvalidCalendarConfigurationException(String message) {
         super(message);

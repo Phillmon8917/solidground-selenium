@@ -12,8 +12,11 @@ import java.time.Duration;
  * Every value already has TimeoutUtil's CI adjustment applied.
  */
 public final class NetworkDefaults {
+    /** The default overall time to wait for a network response, with TimeoutUtil's CI adjustment applied. */
     public static final Duration DEFAULT_TIMEOUT = TimeoutUtil.adjust(Duration.ofSeconds(30));
+    /** The default time to wait before retrying a fetch that has not shown up yet, with TimeoutUtil's CI adjustment applied. */
     public static final Duration FETCH_RETRY_DELAY = TimeoutUtil.adjust(Duration.ofSeconds(3));
+    /** The default time to wait after refreshing the page during a retry, with TimeoutUtil's CI adjustment applied. */
     public static final Duration RELOAD_TIMEOUT = TimeoutUtil.adjust(Duration.ofSeconds(30));
 
     private NetworkDefaults() {

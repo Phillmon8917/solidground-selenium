@@ -22,6 +22,9 @@ public class CoordinationOptions {
      * wait for, using the default timeout. Expects a non-empty list of
      * actions to run. Throws an InvalidNetworkExpectationException if the
      * list is null or empty.
+     *
+     * @param actions the actions to run, such as clicking a button that
+     *                triggers a network request; must not be null or empty
      */
     public CoordinationOptions(List<Runnable> actions) {
         this(actions, List.of(), NetworkDefaults.DEFAULT_TIMEOUT);
@@ -33,6 +36,12 @@ public class CoordinationOptions {
      * list of actions to run and the list of responses expected to
      * result from them. Throws an InvalidNetworkExpectationException if
      * the action list is null or empty.
+     *
+     * @param actions          the actions to run, such as clicking a button
+     *                         that triggers a network request; must not be
+     *                         null or empty
+     * @param waitForResponses the responses expected to result from the
+     *                         actions
      */
     public CoordinationOptions(List<Runnable> actions, List<ResponseExpectation> waitForResponses) {
         this(actions, waitForResponses, NetworkDefaults.DEFAULT_TIMEOUT);
@@ -46,6 +55,16 @@ public class CoordinationOptions {
      * wait for those responses. Throws an
      * InvalidNetworkExpectationException if the action list is null or
      * empty.
+     *
+     * @param actions          the actions to run, such as clicking a button
+     *                         that triggers a network request; must not be
+     *                         null or empty
+     * @param waitForResponses the responses expected to result from the
+     *                         actions, may be null or empty if none are
+     *                         expected
+     * @param timeout          how long to wait for the expected responses to
+     *                         arrive, may be null to fall back to the
+     *                         default timeout
      */
     public CoordinationOptions(List<Runnable> actions, List<ResponseExpectation> waitForResponses, Duration timeout) {
         if (actions == null || actions.isEmpty()) {
@@ -59,6 +78,8 @@ public class CoordinationOptions {
     /**
      * Returns the actions that should be run, such as clicking a button
      * that triggers a network request.
+     *
+     * @return the actions that should be run
      */
     public List<Runnable> getActions() {
         return actions;
@@ -67,6 +88,8 @@ public class CoordinationOptions {
     /**
      * Returns the responses that should be waited for and validated
      * after the actions run.
+     *
+     * @return the responses that should be waited for and validated
      */
     public List<ResponseExpectation> getWaitForResponses() {
         return waitForResponses;
@@ -74,6 +97,8 @@ public class CoordinationOptions {
 
     /**
      * Returns how long to wait for the expected responses to arrive.
+     *
+     * @return how long to wait for the expected responses to arrive
      */
     public Duration getTimeout() {
         return timeout;

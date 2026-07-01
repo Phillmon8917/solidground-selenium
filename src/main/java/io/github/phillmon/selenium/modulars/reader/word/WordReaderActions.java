@@ -18,6 +18,8 @@ public class WordReaderActions extends AbstractDocumentReaderActions {
     /**
      * Creates the Word reader using the given downloader, and configures
      * it to save downloaded documents with the .docx extension.
+     *
+     * @param downloader the downloader this reader will use to fetch Word documents
      */
     public WordReaderActions(DocumentDownloader downloader) {
         super(downloader, "docx");
@@ -27,6 +29,10 @@ public class WordReaderActions extends AbstractDocumentReaderActions {
      * Extracts all readable text from the Word document. Expects the
      * path to the document file. Returns the extracted text with leading
      * and trailing whitespace removed.
+     *
+     * @param filePath the path to the Word document file
+     * @return the extracted text with leading and trailing whitespace removed
+     * @throws IOException if the document cannot be read or parsed
      */
     @Override
     protected String extractText(Path filePath) throws IOException {

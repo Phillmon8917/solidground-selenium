@@ -35,6 +35,11 @@ public final class SafeStep {
      * automatically from the calling method's name. Expects the WebDriver
      * for the current browser session and the step to run. Returns
      * whatever the step returns when it succeeds.
+     *
+     * @param <T> the type of value the step produces
+     * @param driver the WebDriver for the current browser session
+     * @param step the step to run
+     * @return whatever the step returns when it succeeds
      */
     public static <T> T run(WebDriver driver, ThrowingSupplier<T> step) {
         return run(driver, callerLabel(), step);
@@ -47,6 +52,12 @@ public final class SafeStep {
      * Returns whatever the step returns when it succeeds. If the step
      * throws, this attaches a screenshot, reports the failure, and
      * rethrows it.
+     *
+     * @param <T> the type of value the step produces
+     * @param driver the WebDriver for the current browser session
+     * @param label the label describing the step, used in logs and screenshots
+     * @param step the step to run
+     * @return whatever the step returns when it succeeds
      */
     public static <T> T run(WebDriver driver, String label, ThrowingSupplier<T> step) {
         try {
@@ -60,6 +71,9 @@ public final class SafeStep {
      * Runs a step that does not return anything, using a label that is
      * worked out automatically from the calling method's name. Expects the
      * WebDriver for the current browser session and the step to run.
+     *
+     * @param driver the WebDriver for the current browser session
+     * @param step the step to run
      */
     public static void run(WebDriver driver, ThrowingRunnable step) {
         run(driver, callerLabel(), step);
@@ -71,6 +85,10 @@ public final class SafeStep {
      * current browser session, a label describing the step, and the step
      * to run. If the step throws, this attaches a screenshot, reports the
      * failure, and rethrows it.
+     *
+     * @param driver the WebDriver for the current browser session
+     * @param label the label describing the step, used in logs and screenshots
+     * @param step the step to run
      */
     public static void run(WebDriver driver, String label, ThrowingRunnable step) {
         try {
@@ -87,6 +105,10 @@ public final class SafeStep {
      * Each step is tagged with its position in the list, for example
      * "label [step 1]", so if one of the steps fails it is obvious which
      * one from the fault log.
+     *
+     * @param driver the WebDriver for the current browser session
+     * @param label the label for the whole sequence
+     * @param steps the ordered list of steps to run
      */
     public static void runSequence(WebDriver driver, String label, List<ThrowingRunnable> steps) {
         for (int i = 0; i < steps.size(); i++) {

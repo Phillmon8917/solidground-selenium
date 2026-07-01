@@ -10,6 +10,12 @@ import io.qameta.allure.Allure;
  */
 public class AllureReporter implements TestReporter {
     /**
+     * Creates a reporter that attaches log messages to the Allure report.
+     */
+    public AllureReporter() {
+    }
+
+    /**
      * Attaches the message to the Allure report under an INFO label.
      */
     @Override

@@ -24,6 +24,8 @@ public class DateObject {
 
     /**
      * Returns the day of the month, for example 15 for the 15th.
+     *
+     * @return the day of the month
      */
     public int getDay() {
         return date.getDayOfMonth();
@@ -31,6 +33,8 @@ public class DateObject {
 
     /**
      * Returns the name of the month, for example "JANUARY".
+     *
+     * @return the name of the month
      */
     public String getMonth() {
         return date.getMonth().toString();
@@ -39,6 +43,8 @@ public class DateObject {
     /**
      * Returns the month as a number, where 1 is January and 12 is
      * December.
+     *
+     * @return the month as a number from 1 to 12
      */
     public int getMonthValue() {
         return date.getMonthValue();
@@ -46,6 +52,8 @@ public class DateObject {
 
     /**
      * Returns the four digit year.
+     *
+     * @return the four digit year
      */
     public int getYear() {
         return date.getYear();
@@ -53,6 +61,8 @@ public class DateObject {
 
     /**
      * Returns this date as a plain java.time.LocalDate.
+     *
+     * @return this date as a plain java.time.LocalDate
      */
     public LocalDate toLocalDate() {
         return date;
@@ -65,6 +75,8 @@ public class DateObject {
     /**
      * Returns a new Builder for constructing a DateObject one field at a
      * time from a day, month name, and year.
+     *
+     * @return a new Builder for constructing a DateObject
      */
     public static Builder builder() {
         return new Builder();
@@ -74,6 +86,9 @@ public class DateObject {
      * Creates a DateObject from an existing LocalDate. Expects a date
      * whose year falls within the supported range. Throws an
      * InvalidDateException if the year is outside that range.
+     *
+     * @param date the LocalDate to wrap, whose year must fall within the supported range
+     * @return a DateObject wrapping the given date
      */
     public static DateObject fromLocalDate(LocalDate date) {
         validateYear(date.getYear());
@@ -84,6 +99,9 @@ public class DateObject {
      * Parses a date string using the default "MMMM d, yyyy" pattern, for
      * example "January 15, 2026". Expects the date text to parse. Throws
      * an InvalidDateException if the text is blank or cannot be parsed.
+     *
+     * @param dateText the date text to parse, in "MMMM d, yyyy" format
+     * @return a DateObject representing the parsed date
      */
     public static DateObject fromString(String dateText) {
         return fromString(dateText, DEFAULT_FORMAT);
@@ -94,6 +112,10 @@ public class DateObject {
      * and a valid date-time pattern string. Throws an
      * InvalidDateException if the text is blank, the pattern is invalid,
      * or the text does not match the pattern.
+     *
+     * @param dateText the date text to parse
+     * @param pattern  the date-time pattern to parse the text with
+     * @return a DateObject representing the parsed date
      */
     public static DateObject fromString(String dateText, String pattern) {
         return fromString(dateText, toFormatter(pattern));
@@ -104,6 +126,10 @@ public class DateObject {
      * the date text and the preset format to parse it with. Throws an
      * InvalidDateException if the text is blank or does not match the
      * chosen format.
+     *
+     * @param dateText the date text to parse
+     * @param format   the preset format to parse the text with
+     * @return a DateObject representing the parsed date
      */
     public static DateObject fromString(String dateText, DateFormat format) {
         return fromString(dateText, format.getFormatter());
@@ -115,6 +141,10 @@ public class DateObject {
      * InvalidDateException if the text is null, blank, cannot be parsed
      * with the formatter, or parses to a year outside the supported
      * range.
+     *
+     * @param dateText  the date text to parse
+     * @param formatter the formatter to parse the text with
+     * @return a DateObject representing the parsed date
      */
     public static DateObject fromString(String dateText, DateTimeFormatter formatter) {
         if (dateText == null || dateText.isBlank()) {
@@ -134,6 +164,9 @@ public class DateObject {
      * Formats this date using a custom pattern string. Expects a valid
      * date-time pattern. Throws an InvalidDateException if the pattern is
      * not valid.
+     *
+     * @param pattern the date-time pattern to format this date with
+     * @return this date formatted using the given pattern
      */
     public String format(String pattern) {
         return date.format(toFormatter(pattern));
@@ -142,6 +175,9 @@ public class DateObject {
     /**
      * Formats this date using one of the DateFormat presets. Expects the
      * preset format to use.
+     *
+     * @param format the preset format to use
+     * @return this date formatted using the given preset
      */
     public String format(DateFormat format) {
         return date.format(format.getFormatter());
@@ -170,8 +206,17 @@ public class DateObject {
         private Integer year;
 
         /**
+         * Creates an empty Builder with no day, month, or year set yet.
+         */
+        public Builder() {
+        }
+
+        /**
          * Sets the day of the month. Expects a day number, which is only
          * validated once build() combines it with the month and year.
+         *
+         * @param day the day of the month to use
+         * @return this Builder, for chaining further calls
          */
         public Builder withDay(int day) {
             this.day = day;
@@ -183,6 +228,9 @@ public class DateObject {
          * Expects a month name that matches one of the twelve calendar
          * months, ignoring case. Throws an InvalidDateException if the
          * text does not match a real month.
+         *
+         * @param month the month name to use, ignoring case
+         * @return this Builder, for chaining further calls
          */
         public Builder withMonth(String month) {
             this.month = parseMonth(month);
@@ -193,6 +241,9 @@ public class DateObject {
          * Sets the year. Expects a year within the supported range.
          * Throws an InvalidDateException if the year is outside that
          * range.
+         *
+         * @param year the year to use, which must fall within the supported range
+         * @return this Builder, for chaining further calls
          */
         public Builder withYear(int year) {
             validateYear(year);
@@ -205,6 +256,8 @@ public class DateObject {
          * Throws an InvalidDateException if any of the day, month, or
          * year was never set, or if the combination does not form a real
          * calendar date, such as February 30th.
+         *
+         * @return a DateObject built from the day, month, and year set so far
          */
         public DateObject build() {
             if (day == null || month == null || year == null) {
@@ -246,6 +299,9 @@ public class DateObject {
     /**
      * Returns true when the other object is a DateObject representing the
      * same calendar date.
+     *
+     * @param o the object to compare with this date
+     * @return true when the other object is a DateObject with the same calendar date
      */
     @Override
     public boolean equals(Object o) {
@@ -258,6 +314,8 @@ public class DateObject {
     /**
      * Returns a hash code consistent with equals, based on the wrapped
      * date.
+     *
+     * @return a hash code consistent with equals
      */
     @Override
     public int hashCode() {
@@ -267,6 +325,8 @@ public class DateObject {
     /**
      * Returns this date formatted using the default "MMMM d, yyyy"
      * pattern, for example "January 15, 2026".
+     *
+     * @return this date formatted using the default pattern
      */
     @Override
     public String toString() {

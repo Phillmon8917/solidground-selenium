@@ -23,23 +23,38 @@ import org.openqa.selenium.WebDriver;
  * directly, so the same tested action code is shared across every page.
  */
 public class ActionsContainer {
+    /** Assertions and soft assertions with logging built in. */
     public final AssertionActions assertionActions;
+    /** Whole-browser actions: navigation, windows, tabs, screenshots. */
     public final BrowserActions browserActions;
+    /** Driving date-picker calendar widgets. */
     public final CalendarActions calendarActions;
+    /** Native HTML {@code <select>} dropdowns. */
     public final SelectDropdownActions dropdownActions;
+    /** The main element actions: click, type, read text/attributes, wait. */
     public final ElementActions elementActions;
+    /** Switching into and out of iframes. */
     public final IframeActions iframeActions;
+    /** Keyboard input and shortcuts. */
     public final KeyboardActions keyboardActions;
+    /** Waiting for spinners, skeletons, and page loaders to disappear. */
     public final LoadingIndicatorActions loadingIndicatorActions;
+    /** Mouse gestures: hover, drag and drop, scrolling. */
     public final MouseActions mouseActions;
+    /** Verifying real network requests and responses via Chrome DevTools. */
     public final NetworkValidationActions networkActions;
+    /** Downloading and reading Excel, PDF, text, and Word documents. */
     public final ReaderActionsContainer reader;
+    /** Waiting for a value to stop changing (stabilize). */
     public final SmartWaitActions waitActions;
+    /** Switch/checkbox style toggle elements. */
     public final ToggleActions toggleActions;
 
     /**
      * Creates every action group using the default options. Expects a
      * non-null WebDriver that is already attached to a browser session.
+     *
+     * @param driver the WebDriver to build every action group with
      */
     public ActionsContainer(WebDriver driver) {
         this(driver, PageModularOptions.defaults());
@@ -51,6 +66,9 @@ public class ActionsContainer {
      * resolver, or the download folder used by the reader actions. Expects
      * a non-null WebDriver and a non-null PageModularOptions object, and
      * throws an IllegalArgumentException when either one is missing.
+     *
+     * @param driver  the WebDriver to build every action group with
+     * @param options the options used to customise the action groups
      */
     public ActionsContainer(WebDriver driver, PageModularOptions options) {
         if (driver == null) {

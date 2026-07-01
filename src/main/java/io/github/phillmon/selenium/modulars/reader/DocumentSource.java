@@ -27,6 +27,9 @@ public class DocumentSource {
      * downloaded and saved to disk, so no download is needed. Expects a
      * non-null path to the existing file. Throws a ReaderException if the
      * path is null.
+     *
+     * @param existingPath the path to the already downloaded file
+     * @return a source that points directly at the existing file
      */
     public static DocumentSource fromPath(Path existingPath) {
         if (existingPath == null) {
@@ -39,6 +42,9 @@ public class DocumentSource {
      * Creates a source that downloads the document directly from a given
      * url. Expects a non-blank url. Throws a ReaderException if the url
      * is null or blank.
+     *
+     * @param url the direct url to download the document from
+     * @return a source that downloads from the given url
      */
     public static DocumentSource fromUrl(String url) {
         if (url == null || url.isBlank()) {
@@ -50,6 +56,8 @@ public class DocumentSource {
     /**
      * Creates a source that downloads whatever document is at the url
      * currently open in the browser's active tab.
+     *
+     * @return a source that downloads from the browser's current tab
      */
     public static DocumentSource fromCurrentTab() {
         return new DocumentSource(null, null, null, false);
@@ -60,6 +68,9 @@ public class DocumentSource {
      * tab showing the document, downloads it from that tab's url, and
      * then closes the tab afterwards. Expects the action to run, such as
      * clicking a link that opens the document in a new tab.
+     *
+     * @param triggerAction the action to run that is expected to open the new tab
+     * @return a source that opens a new tab and closes it after capturing the document
      */
     public static DocumentSource fromNewTab(Runnable triggerAction) {
         return fromNewTab(triggerAction, true);
@@ -71,6 +82,10 @@ public class DocumentSource {
      * Expects the action to run and whether the new tab should be closed
      * again once the document's url has been captured. Throws a
      * ReaderException if the action is null.
+     *
+     * @param triggerAction        the action to run that is expected to open the new tab
+     * @param closeTabAfterCapture whether the new tab should be closed after the document's url is captured
+     * @return a source that opens a new tab and optionally closes it after capturing the document
      */
     public static DocumentSource fromNewTab(Runnable triggerAction, boolean closeTabAfterCapture) {
         if (triggerAction == null) {
@@ -82,6 +97,8 @@ public class DocumentSource {
     /**
      * Returns whether this source already points at a file on disk,
      * meaning no download is required.
+     *
+     * @return true if this source already has an existing file path, false otherwise
      */
     public boolean hasExistingPath() {
         return existingPath != null;
@@ -90,6 +107,8 @@ public class DocumentSource {
     /**
      * Returns the path to the already downloaded file, or null if this
      * source is not based on an existing path.
+     *
+     * @return the path to the existing file, or null if this source has none
      */
     public Path getExistingPath() {
         return existingPath;
@@ -98,6 +117,8 @@ public class DocumentSource {
     /**
      * Returns the direct url to download from, or null if this source is
      * not based on a direct url.
+     *
+     * @return the direct url to download from, or null if this source has none
      */
     public String getUrl() {
         return url;
@@ -106,6 +127,8 @@ public class DocumentSource {
     /**
      * Returns the action that should be run to open the document in a new
      * tab, or null if this source does not use that approach.
+     *
+     * @return the trigger action to open a new tab, or null if this source has none
      */
     public Runnable getTriggerAction() {
         return triggerAction;
@@ -114,6 +137,8 @@ public class DocumentSource {
     /**
      * Returns whether the new tab opened by the trigger action should be
      * closed again after the document's url has been captured.
+     *
+     * @return true if the new tab should be closed after capture, false otherwise
      */
     public boolean isCloseTabAfterCapture() {
         return closeTabAfterCapture;

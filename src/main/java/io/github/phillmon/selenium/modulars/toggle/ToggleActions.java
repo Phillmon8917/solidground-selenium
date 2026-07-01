@@ -25,6 +25,9 @@ public class ToggleActions {
      * Creates the toggle actions using a default timeout of 10 seconds.
      * Expects the WebDriver for the current browser session and the
      * resolver used to read whether a toggle is on.
+     *
+     * @param driver   the WebDriver for the current browser session
+     * @param resolver the resolver used to read whether a toggle is on
      */
     public ToggleActions(WebDriver driver, ToggleStateResolver resolver) {
         this(driver, resolver, Duration.ofSeconds(10));
@@ -35,6 +38,10 @@ public class ToggleActions {
      * WebDriver for the current browser session, the resolver used to
      * read whether a toggle is on, and how long to wait for the toggle to
      * become visible.
+     *
+     * @param driver   the WebDriver for the current browser session
+     * @param resolver the resolver used to read whether a toggle is on
+     * @param timeout  how long to wait for the toggle to become visible
      */
     public ToggleActions(WebDriver driver, ToggleStateResolver resolver, Duration timeout) {
         this.driver = driver;
@@ -48,6 +55,10 @@ public class ToggleActions {
      * logging, and the name of the calling method. Throws a
      * ToggleActionException if the toggle still reads as off after being
      * clicked.
+     *
+     * @param locator     the locator for the toggle
+     * @param elementName a readable name for the toggle, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void ensureToggledOn(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -71,6 +82,10 @@ public class ToggleActions {
      * for logging, and the name of the calling method. Throws a
      * ToggleActionException if the toggle still reads as on after being
      * clicked.
+     *
+     * @param locator     the locator for the toggle
+     * @param elementName a readable name for the toggle, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void ensureToggledOff(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -93,6 +108,10 @@ public class ToggleActions {
      * the locator for the toggle, a readable name for logging, and the
      * name of the calling method. Throws a ToggleActionException if the
      * toggle is off.
+     *
+     * @param locator     the locator for the toggle
+     * @param elementName a readable name for the toggle, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void assertToggledOn(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -107,6 +126,10 @@ public class ToggleActions {
      * Expects the locator for the toggle, a readable name for logging,
      * and the name of the calling method. Throws a ToggleActionException
      * if the toggle is on.
+     *
+     * @param locator     the locator for the toggle
+     * @param elementName a readable name for the toggle, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void assertToggledOff(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -120,6 +143,11 @@ public class ToggleActions {
      * Returns whether a toggle is currently on, without changing it or
      * failing the test either way. Expects the locator for the toggle, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the toggle
+     * @param elementName a readable name for the toggle, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return true if the toggle currently reads as on, false otherwise
      */
     public boolean isOn(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);

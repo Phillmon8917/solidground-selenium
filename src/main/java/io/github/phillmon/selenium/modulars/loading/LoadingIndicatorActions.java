@@ -25,6 +25,8 @@ public class LoadingIndicatorActions {
     /**
      * Creates the loading indicator actions using a default timeout of 50
      * seconds. Expects the WebDriver for the current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public LoadingIndicatorActions(WebDriver driver) {
         this(driver, java.time.Duration.ofSeconds(50));
@@ -34,6 +36,9 @@ public class LoadingIndicatorActions {
      * Creates the loading indicator actions with a custom timeout.
      * Expects the WebDriver for the current browser session and how long
      * to wait for a loading indicator to disappear.
+     *
+     * @param driver  the WebDriver for the current browser session
+     * @param timeout how long to wait for a loading indicator to disappear
      */
     public LoadingIndicatorActions(WebDriver driver, java.time.Duration timeout) {
         this.driver = driver;
@@ -43,6 +48,8 @@ public class LoadingIndicatorActions {
     /**
      * Waits for the default page loader to disappear. Expects the name of
      * the calling method for logging.
+     *
+     * @param methodName the name of the calling method, for logging
      */
     public void waitForPageLoader(String methodName) {
         waitForHidden(DEFAULT_SPINNER, "page loader", methodName, "page loader");
@@ -51,6 +58,8 @@ public class LoadingIndicatorActions {
     /**
      * Waits for the default spinner element to disappear. Expects the
      * name of the calling method for logging.
+     *
+     * @param methodName the name of the calling method, for logging
      */
     public void waitForSpinner(String methodName) {
         waitForHidden(DEFAULT_SPINNER, "spinner", methodName, "spinner");
@@ -60,6 +69,10 @@ public class LoadingIndicatorActions {
      * Waits for a custom spinner element to disappear. Expects the
      * locator for the spinner, a readable name for logging, and the name
      * of the calling method.
+     *
+     * @param locator     the locator for the spinner element
+     * @param elementName a readable name for the spinner, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void waitForSpinner(By locator, String elementName, String methodName) {
         waitForHidden(locator, elementName, methodName, "spinner");
@@ -68,6 +81,8 @@ public class LoadingIndicatorActions {
     /**
      * Waits for the default skeleton placeholder to disappear. Expects
      * the name of the calling method for logging.
+     *
+     * @param methodName the name of the calling method, for logging
      */
     public void waitForSkeleton(String methodName) {
         waitForHidden(DEFAULT_SKELETON, "skeleton loader", methodName, "skeleton loader");
@@ -77,6 +92,10 @@ public class LoadingIndicatorActions {
      * Waits for a custom skeleton placeholder to disappear. Expects the
      * locator for the skeleton element, a readable name for logging, and
      * the name of the calling method.
+     *
+     * @param locator     the locator for the skeleton element
+     * @param elementName a readable name for the skeleton element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void waitForSkeleton(By locator, String elementName, String methodName) {
         waitForHidden(locator, elementName, methodName, "skeleton loader");
@@ -86,6 +105,10 @@ public class LoadingIndicatorActions {
      * Waits for any loading indicator to disappear. Expects the locator
      * for the indicator, a readable name for logging, and the name of the
      * calling method.
+     *
+     * @param locator     the locator for the loading indicator
+     * @param elementName a readable name for the indicator, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void waitForToDisappear(By locator, String elementName, String methodName) {
         waitForHidden(locator, elementName, methodName, "loading indicator");
@@ -98,6 +121,11 @@ public class LoadingIndicatorActions {
      * waiting for a disappearance that will never happen. Expects the
      * locator for the indicator, how long to wait for it to appear, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator           the locator for the loading indicator
+     * @param appearanceTimeout how long to wait for the indicator to appear
+     * @param elementName       a readable name for the indicator, for logging
+     * @param methodName        the name of the calling method, for logging
      */
     public void waitForToAppearThenDisappear(By locator, java.time.Duration appearanceTimeout, String elementName, String methodName) {
         java.time.Duration adjustedAppearanceTimeout = TimeoutUtil.adjust(appearanceTimeout);
@@ -117,6 +145,10 @@ public class LoadingIndicatorActions {
      * each indicator. Throws a LoadingIndicatorException if no locators
      * are given, or if the number of names does not match the number of
      * locators.
+     *
+     * @param methodName   the name of the calling method, for logging
+     * @param elementNames readable names matching each locator, for logging
+     * @param locators     the locators for each loading indicator, waited on in order
      */
     public void waitForAllToDisappear(String methodName, List<String> elementNames, By... locators) {
         if (locators == null || locators.length == 0) {
@@ -136,6 +168,11 @@ public class LoadingIndicatorActions {
      * page right now, without waiting. Expects the locator for the
      * indicator, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the loading indicator
+     * @param elementName a readable name for the indicator, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return true if the indicator is currently visible, false otherwise
      */
     public boolean isLoading(By locator, String elementName, String methodName) {
         boolean loading = !driver.findElements(locator).isEmpty()

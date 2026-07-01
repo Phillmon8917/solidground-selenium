@@ -43,6 +43,9 @@ public final class LoggerUtil {
      * reporter, or to a custom reporter supplied by the caller. Expects
      * the reporter to use from now on, or null to stop attaching to any
      * test report (the file log keeps working regardless).
+     *
+     * @param reporter the reporter to use from now on, or null to stop
+     *                 attaching to any test report
      */
     public static void setReporter(TestReporter reporter) {
         reporters.clear();
@@ -55,6 +58,8 @@ public final class LoggerUtil {
      * Adds an extra reporter alongside whatever is already registered,
      * for example attaching to both Allure and TestNG in the same run.
      * Expects the reporter to add; passing null does nothing.
+     *
+     * @param reporter the reporter to add; passing null does nothing
      */
     public static void addReporter(TestReporter reporter) {
         if (reporter != null) {
@@ -66,6 +71,8 @@ public final class LoggerUtil {
      * Logs an informational message. Expects the message text. Writes it
      * to the slf4j logger, appends it to the execution log file, and
      * sends it to every registered reporter.
+     *
+     * @param message the message text to log
      */
     public static void info(String message) {
         logger.info(message);
@@ -79,6 +86,8 @@ public final class LoggerUtil {
      * Logs a warning message. Expects the message text. Writes it to the
      * slf4j logger, appends it to the execution log file, and sends it to
      * every registered reporter.
+     *
+     * @param message the message text to log
      */
     public static void warning(String message) {
         logger.warn(message);
@@ -92,6 +101,8 @@ public final class LoggerUtil {
      * Logs an error message with no associated exception. Expects the
      * message text. Writes it to the slf4j logger, appends it to the
      * execution log file, and sends it to every registered reporter.
+     *
+     * @param message the message text to log
      */
     public static void error(String message) {
         logger.error(message);
@@ -106,6 +117,9 @@ public final class LoggerUtil {
      * Expects the message text and the exception. Writes both to the
      * slf4j logger, appends them to the execution log file, and sends
      * them to every registered reporter.
+     *
+     * @param message the message text to log
+     * @param e       the exception that caused the error
      */
     public static void error(String message, Throwable e) {
         logger.error(message, e);

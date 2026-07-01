@@ -28,6 +28,8 @@ public class ElementActions {
     /**
      * Creates the element actions using a default timeout of 30 seconds.
      * Expects the WebDriver for the current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public ElementActions(WebDriver driver) {
         this(driver, Duration.ofSeconds(30));
@@ -37,6 +39,9 @@ public class ElementActions {
      * Creates the element actions with a custom timeout. Expects the
      * WebDriver for the current browser session and how long to wait for
      * elements to reach the expected state.
+     *
+     * @param driver  the WebDriver for the current browser session
+     * @param timeout how long to wait for elements to reach the expected state
      */
     public ElementActions(WebDriver driver, Duration timeout) {
         this.driver = driver;
@@ -47,6 +52,10 @@ public class ElementActions {
      * Waits for the element to be clickable and clicks it using a normal
      * Selenium click. Expects the locator for the element, a readable
      * name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to click
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void click(By locator, String elementName, String methodName) {
         waitForClickable(locator, elementName, methodName).click();
@@ -58,6 +67,10 @@ public class ElementActions {
      * click, which can succeed even when another element is visually on
      * top of it. Expects the locator for the element, a readable name for
      * logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to click
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void jsClick(By locator, String elementName, String methodName) {
         WebElement element = waitForPresent(locator, elementName, methodName);
@@ -70,6 +83,10 @@ public class ElementActions {
      * click was intercepted by another element, retries using a
      * JavaScript click instead. Expects the locator for the element, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to click
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void clickWithJsFallback(By locator, String elementName, String methodName) {
         try {
@@ -85,6 +102,11 @@ public class ElementActions {
      * treating the text as sensitive in the log. Expects the locator for
      * the element, the text to type, a readable name for logging, and the
      * name of the calling method.
+     *
+     * @param locator     the locator for the element to type into
+     * @param text        the text to type
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void typeText(By locator, String text, String elementName, String methodName) {
         typeText(locator, text, false, elementName, methodName);
@@ -96,6 +118,12 @@ public class ElementActions {
      * text is sensitive (such as a password) and should be hidden from
      * the log, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to type into
+     * @param text        the text to type
+     * @param sensitive   whether the text is sensitive and should be hidden from the log
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void typeText(By locator, String text, boolean sensitive, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -113,6 +141,11 @@ public class ElementActions {
      * name of the calling method. Use this instead of typeText when a
      * page needs each keystroke to trigger its own event, such as a live
      * search box.
+     *
+     * @param locator     the locator for the element to type into
+     * @param text        the text to type
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void typeSequentially(By locator, String text, String elementName, String methodName) {
         typeSequentially(locator, text, Duration.ofMillis(80), false, elementName, methodName);
@@ -124,6 +157,12 @@ public class ElementActions {
      * locator for the element, the text to type, whether the text is
      * sensitive and should be hidden from the log, a readable name for
      * logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to type into
+     * @param text        the text to type
+     * @param sensitive   whether the text is sensitive and should be hidden from the log
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void typeSequentially(By locator, String text, boolean sensitive, String elementName, String methodName) {
         typeSequentially(locator, text, Duration.ofMillis(80), sensitive, elementName, methodName);
@@ -135,6 +174,12 @@ public class ElementActions {
      * text as sensitive in the log. Expects the locator for the element,
      * the text to type, the delay to wait between each character, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator          the locator for the element to type into
+     * @param text             the text to type
+     * @param delayBetweenKeys the delay to wait between each character
+     * @param elementName      a readable name for the element, for logging
+     * @param methodName       the name of the calling method, for logging
      */
     public void typeSequentially(By locator, String text, Duration delayBetweenKeys, String elementName, String methodName) {
         typeSequentially(locator, text, delayBetweenKeys, false, elementName, methodName);
@@ -147,6 +192,13 @@ public class ElementActions {
      * character, whether the text is sensitive and should be hidden from
      * the log, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator          the locator for the element to type into
+     * @param text             the text to type
+     * @param delayBetweenKeys the delay to wait between each character
+     * @param sensitive        whether the text is sensitive and should be hidden from the log
+     * @param elementName      a readable name for the element, for logging
+     * @param methodName       the name of the calling method, for logging
      */
     public void typeSequentially(By locator, String text, Duration delayBetweenKeys, boolean sensitive, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -165,6 +217,11 @@ public class ElementActions {
      * text as sensitive in the log. Expects the locator for the element,
      * the text to append, a readable name for logging, and the name of
      * the calling method.
+     *
+     * @param locator     the locator for the element to append text to
+     * @param text        the text to append
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void appendText(By locator, String text, String elementName, String methodName) {
         appendText(locator, text, false, elementName, methodName);
@@ -175,6 +232,12 @@ public class ElementActions {
      * locator for the element, the text to append, whether the text is
      * sensitive and should be hidden from the log, a readable name for
      * logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to append text to
+     * @param text        the text to append
+     * @param sensitive   whether the text is sensitive and should be hidden from the log
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void appendText(By locator, String text, boolean sensitive, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -187,6 +250,10 @@ public class ElementActions {
      * Clears the text out of an input element using its clear method.
      * Expects the locator for the element, a readable name for logging,
      * and the name of the calling method.
+     *
+     * @param locator     the locator for the element to clear
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void clearText(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -200,6 +267,10 @@ public class ElementActions {
      * method does not work reliably. Expects the locator for the
      * element, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to clear
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void clearTextWithKeys(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -212,6 +283,10 @@ public class ElementActions {
      * Submits the form that the given element belongs to. Expects the
      * locator for an element inside the form, a readable name for
      * logging, and the name of the calling method.
+     *
+     * @param locator     the locator for an element inside the form
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void submit(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -224,6 +299,11 @@ public class ElementActions {
      * path as keystrokes. Expects the locator for the file input, the
      * full path of the file to upload, a readable name for logging, and
      * the name of the calling method.
+     *
+     * @param locator     the locator for the file input element
+     * @param filePath    the full path of the file to upload
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void uploadFile(By locator, String filePath, String elementName, String methodName) {
         WebElement element = waitForPresent(locator, elementName, methodName);
@@ -235,6 +315,11 @@ public class ElementActions {
      * Returns the visible text of an element. Expects the locator for the
      * element, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to read
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the visible text of the element
      */
     public String getText(By locator, String elementName, String methodName) {
         String text = waitForVisible(locator, elementName, methodName).getText();
@@ -246,6 +331,12 @@ public class ElementActions {
      * Returns the value of an HTML attribute on an element. Expects the
      * locator for the element, the name of the attribute to read, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to read
+     * @param attribute   the name of the attribute to read
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the value of the attribute
      */
     public String getAttribute(By locator, String attribute, String elementName, String methodName) {
         String value = waitForVisible(locator, elementName, methodName).getAttribute(attribute);
@@ -257,6 +348,12 @@ public class ElementActions {
      * Returns the computed value of a CSS property on an element. Expects
      * the locator for the element, the name of the CSS property to read,
      * a readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to read
+     * @param property    the name of the CSS property to read
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the computed value of the CSS property
      */
     public String getCssValue(By locator, String property, String elementName, String methodName) {
         String value = waitForVisible(locator, elementName, methodName).getCssValue(property);
@@ -268,6 +365,11 @@ public class ElementActions {
      * Returns the visible text of every element that matches the locator.
      * Expects the locator matching several elements, a readable name for
      * logging, and the name of the calling method.
+     *
+     * @param locator     the locator matching several elements
+     * @param elementName a readable name for the elements, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the visible text of every matching element, in the order found
      */
     public List<String> getAllText(By locator, String elementName, String methodName) {
         List<WebElement> elements = waitForAllVisible(locator, elementName, methodName);
@@ -281,6 +383,11 @@ public class ElementActions {
      * Returns how many elements on the page currently match the locator,
      * without waiting for them to appear. Expects the locator to count,
      * a readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator to count
+     * @param elementName a readable name for the elements, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return the number of elements currently matching the locator
      */
     public int countElements(By locator, String elementName, String methodName) {
         int count = driver.findElements(locator).size();
@@ -294,6 +401,11 @@ public class ElementActions {
      * readable name for logging, and the name of the calling method.
      * Returns false rather than throwing if the element is not present
      * at all.
+     *
+     * @param locator     the locator for the element to check
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return true if the element is currently displayed, false otherwise or if not present
      */
     public boolean isDisplayed(By locator, String elementName, String methodName) {
         boolean displayed;
@@ -310,6 +422,11 @@ public class ElementActions {
      * Waits for the element to be visible and returns whether it is
      * enabled for interaction. Expects the locator for the element, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to check
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return true if the element is enabled for interaction, false otherwise
      */
     public boolean isEnabled(By locator, String elementName, String methodName) {
         boolean enabled = waitForVisible(locator, elementName, methodName).isEnabled();
@@ -322,6 +439,11 @@ public class ElementActions {
      * currently selected, such as a checked checkbox or a chosen radio
      * button. Expects the locator for the element, a readable name for
      * logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to check
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return true if the element is currently selected, false otherwise
      */
     public boolean isSelected(By locator, String elementName, String methodName) {
         boolean selected = waitForVisible(locator, elementName, methodName).isSelected();
@@ -333,6 +455,11 @@ public class ElementActions {
      * Returns whether at least one element matches the locator right now,
      * without waiting. Expects the locator for the element, a readable
      * name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to check
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @return true if at least one element currently matches the locator, false otherwise
      */
     public boolean isPresent(By locator, String elementName, String methodName) {
         boolean present = !driver.findElements(locator).isEmpty();
@@ -344,6 +471,10 @@ public class ElementActions {
      * Scrolls the page so that the element is centred in the viewport.
      * Expects the locator for the element, a readable name for logging,
      * and the name of the calling method.
+     *
+     * @param locator     the locator for the element to scroll to
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void scrollIntoView(By locator, String elementName, String methodName) {
         WebElement element = waitForPresent(locator, elementName, methodName);
@@ -355,6 +486,10 @@ public class ElementActions {
      * Scrolls the whole page window by a given horizontal and vertical
      * amount. Expects how far to scroll on the x axis, how far to scroll
      * on the y axis, and the name of the calling method for logging.
+     *
+     * @param deltaX     how far to scroll on the x axis
+     * @param deltaY     how far to scroll on the y axis
+     * @param methodName the name of the calling method, for logging
      */
     public void scrollBy(int deltaX, int deltaY, String methodName) {
         executeScript("window.scrollBy(arguments[0], arguments[1]);", deltaX, deltaY);
@@ -367,6 +502,10 @@ public class ElementActions {
      * readable name for logging, and the name of the calling method.
      * Throws an ElementActionException if the element is still visible
      * once the configured timeout runs out.
+     *
+     * @param locator     the locator for the element to wait on
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void waitForInvisibility(By locator, String elementName, String methodName) {
         try {
@@ -385,6 +524,11 @@ public class ElementActions {
      * readable name for logging, and the name of the calling method.
      * Throws an ElementActionException if the text does not appear within
      * the configured timeout.
+     *
+     * @param locator     the locator for the element to wait on
+     * @param expectedText the text that should appear in the element
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void waitForTextToBePresent(By locator, String expectedText, String elementName, String methodName) {
         try {

@@ -7,8 +7,11 @@ package io.github.phillmon.selenium.utils.timeout;
  * considered timed out.
  */
 public enum CiMultiplier {
+    /** Leaves the base timeout unchanged. */
     SINGLE(1),
+    /** Doubles the base timeout. */
     DOUBLE(2),
+    /** Triples the base timeout. */
     TRIPLE(3);
 
     private final int factor;
@@ -19,6 +22,8 @@ public enum CiMultiplier {
 
     /**
      * Returns the number a base timeout should be multiplied by.
+     *
+     * @return the multiplier to apply to a base timeout
      */
     public int getFactor() {
         return factor;

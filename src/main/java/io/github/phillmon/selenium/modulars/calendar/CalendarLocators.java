@@ -31,6 +31,8 @@ public class CalendarLocators {
     /**
      * Returns the locator for the button that moves the calendar forward
      * one month.
+     *
+     * @return the locator for the next month button
      */
     public By getNextButton() {
         return nextButton;
@@ -39,6 +41,8 @@ public class CalendarLocators {
     /**
      * Returns the locator for the button that moves the calendar back one
      * month.
+     *
+     * @return the locator for the previous month button
      */
     public By getPreviousButton() {
         return previousButton;
@@ -47,6 +51,8 @@ public class CalendarLocators {
     /**
      * Returns the locator for the caption element that displays the month
      * and year currently shown on the calendar.
+     *
+     * @return the locator for the caption element
      */
     public By getCaption() {
         return caption;
@@ -55,6 +61,8 @@ public class CalendarLocators {
     /**
      * Returns the formatter used to read the month and year out of the
      * caption's text.
+     *
+     * @return the formatter used to parse the caption's month and year
      */
     public DateTimeFormatter getCaptionFormatter() {
         return captionFormatter;
@@ -64,6 +72,9 @@ public class CalendarLocators {
      * Builds the locator for the button that represents the given date on
      * the calendar. Expects the date to build a locator for. Returns the
      * locator that CalendarActions should click to select that day.
+     *
+     * @param date the date to build a day locator for
+     * @return the locator that CalendarActions should click to select that day
      */
     public By dayLocatorFor(DateObject date) {
         return dayLocator.apply(date);
@@ -71,6 +82,8 @@ public class CalendarLocators {
 
     /**
      * Returns a new Builder for creating a custom CalendarLocators.
+     *
+     * @return a new, empty Builder
      */
     public static Builder builder() {
         return new Builder();
@@ -81,6 +94,8 @@ public class CalendarLocators {
      * layout, where the next and previous buttons are identified by their
      * aria-label, the caption is a status element, and each day button
      * has a data-day attribute formatted as month/day/year.
+     *
+     * @return a CalendarLocators configured for the common day-picker layout
      */
     public static CalendarLocators defaultDayPicker() {
         DateTimeFormatter dayAttributeFormat = DateTimeFormatter.ofPattern("M/d/yyyy", Locale.ENGLISH);
@@ -107,8 +122,17 @@ public class CalendarLocators {
         private Function<DateObject, By> dayLocator;
 
         /**
+         * Creates an empty builder with no locators set yet.
+         */
+        public Builder() {
+        }
+
+        /**
          * Sets the locator for the next month button. Expects a locator
          * that finds that button on the page.
+         *
+         * @param nextButton the locator that finds the next month button
+         * @return this Builder, for chaining further with calls
          */
         public Builder withNextButton(By nextButton) {
             this.nextButton = nextButton;
@@ -118,6 +142,9 @@ public class CalendarLocators {
         /**
          * Sets the locator for the previous month button. Expects a
          * locator that finds that button on the page.
+         *
+         * @param previousButton the locator that finds the previous month button
+         * @return this Builder, for chaining further with calls
          */
         public Builder withPreviousButton(By previousButton) {
             this.previousButton = previousButton;
@@ -128,6 +155,9 @@ public class CalendarLocators {
          * Sets the locator for the caption element showing the currently
          * displayed month and year. Expects a locator that finds that
          * element on the page.
+         *
+         * @param caption the locator that finds the caption element
+         * @return this Builder, for chaining further with calls
          */
         public Builder withCaption(By caption) {
             this.caption = caption;
@@ -138,6 +168,9 @@ public class CalendarLocators {
          * Sets the date pattern used to read the month and year from the
          * caption text, instead of the default "MMMM yyyy" pattern.
          * Expects a valid date-time pattern string.
+         *
+         * @param pattern the date-time pattern used to parse the caption text
+         * @return this Builder, for chaining further with calls
          */
         public Builder withCaptionFormat(String pattern) {
             this.captionFormatter = DateTimeFormatter.ofPattern(pattern, Locale.ENGLISH);
@@ -148,6 +181,9 @@ public class CalendarLocators {
          * Sets the function used to build a locator for any given day.
          * Expects a function that takes a DateObject and returns the
          * locator for the button representing that day on the calendar.
+         *
+         * @param dayLocator the function that builds a locator for a given day
+         * @return this Builder, for chaining further with calls
          */
         public Builder withDayLocator(Function<DateObject, By> dayLocator) {
             this.dayLocator = dayLocator;
@@ -159,6 +195,8 @@ public class CalendarLocators {
          * InvalidCalendarConfigurationException if the next button,
          * previous button, caption, or day locator was never set, since
          * CalendarActions cannot work without all of them.
+         *
+         * @return the CalendarLocators built from the values set on this Builder
          */
         public CalendarLocators build() {
             if (nextButton == null || previousButton == null || caption == null || dayLocator == null) {

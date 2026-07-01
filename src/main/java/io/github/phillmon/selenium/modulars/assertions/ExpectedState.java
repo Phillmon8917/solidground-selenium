@@ -7,6 +7,8 @@ package io.github.phillmon.selenium.modulars.assertions;
  * should check for.
  */
 public enum ExpectedState {
+    /** The condition is expected to evaluate to true. */
     TRUE,
+    /** The condition is expected to evaluate to false. */
     FALSE
 }

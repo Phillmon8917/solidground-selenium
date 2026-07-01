@@ -18,6 +18,8 @@ public class AssertionActions {
      * Creates the assertion actions using the given SoftAssert instance,
      * so every soft assertion made through this class is collected on the
      * same SoftAssert and can be checked together later with assertAll.
+     *
+     * @param softAssert the SoftAssert instance to collect soft assertions on
      */
     public AssertionActions(SoftAssert softAssert) {
         this.softAssert = softAssert;
@@ -28,6 +30,11 @@ public class AssertionActions {
      * Expects the actual value, the expected value, and the name of the
      * calling method for logging. Stops the test immediately if the
      * values are not equal.
+     *
+     * @param <T>        the type of value being compared
+     * @param actual     the value produced by the code under test
+     * @param expected   the value the actual value should equal
+     * @param methodName the name of the calling method, for logging
      */
     public <T> void assertEqualsTo(T actual, T expected, String methodName) {
         Assert.assertEquals(actual, expected, methodName + " - expected: " + expected + " but found: " + actual);
@@ -39,6 +46,11 @@ public class AssertionActions {
      * Expects the actual value, the expected value, and the name of the
      * calling method for logging. Records a failure without stopping the
      * test if the values are not equal.
+     *
+     * @param <T>        the type of value being compared
+     * @param actual     the value produced by the code under test
+     * @param expected   the value the actual value should equal
+     * @param methodName the name of the calling method, for logging
      */
     public <T> void softAssertEqualsTo(T actual, T expected, String methodName) {
         softAssert.assertEquals(actual, expected, methodName + " - expected: " + expected + " but found: " + actual);
@@ -50,6 +62,11 @@ public class AssertionActions {
      * value. Expects the actual value, the value it must not equal, and
      * the name of the calling method for logging. Stops the test
      * immediately if the values are equal.
+     *
+     * @param <T>        the type of value being compared
+     * @param actual     the value produced by the code under test
+     * @param expected   the value the actual value must not equal
+     * @param methodName the name of the calling method, for logging
      */
     public <T> void assertNotEqualsTo(T actual, T expected, String methodName) {
         Assert.assertNotEquals(actual, expected, methodName + " - did not expect: " + expected + " but found: " + actual);
@@ -61,6 +78,11 @@ public class AssertionActions {
      * value. Expects the actual value, the value it must not equal, and
      * the name of the calling method for logging. Records a failure
      * without stopping the test if the values are equal.
+     *
+     * @param <T>        the type of value being compared
+     * @param actual     the value produced by the code under test
+     * @param expected   the value the actual value must not equal
+     * @param methodName the name of the calling method, for logging
      */
     public <T> void softAssertNotEqualsTo(T actual, T expected, String methodName) {
         softAssert.assertNotEquals(actual, expected, methodName + " - did not expect: " + expected + " but found: " + actual);
@@ -73,6 +95,10 @@ public class AssertionActions {
      * state, and the name of the calling method for logging. Stops the
      * test immediately if the condition does not match the expected
      * state.
+     *
+     * @param condition    the condition to check
+     * @param expectedState whether the condition is expected to be true or false
+     * @param methodName   the name of the calling method, for logging
      */
     public void assertConditionState(boolean condition, ExpectedState expectedState, String methodName) {
         if (expectedState == ExpectedState.TRUE) {
@@ -88,6 +114,10 @@ public class AssertionActions {
      * (true or false). Expects the condition to check, the expected
      * state, and the name of the calling method for logging. Records a
      * failure without stopping the test if the condition does not match.
+     *
+     * @param condition     the condition to check
+     * @param expectedState whether the condition is expected to be true or false
+     * @param methodName    the name of the calling method, for logging
      */
     public void softAssertConditionState(boolean condition, ExpectedState expectedState, String methodName) {
         if (expectedState == ExpectedState.TRUE) {
@@ -104,6 +134,10 @@ public class AssertionActions {
      * state, and the name of the calling method for logging. Stops the
      * test immediately if the actual value does not match the expected
      * state.
+     *
+     * @param actual        the value produced by the code under test
+     * @param expectedState whether the value is expected to be null or not null
+     * @param methodName    the name of the calling method, for logging
      */
     public void assertNullState(Object actual, NullState expectedState, String methodName) {
         if (expectedState == NullState.NULL) {
@@ -120,6 +154,10 @@ public class AssertionActions {
      * state, and the name of the calling method for logging. Records a
      * failure without stopping the test if the actual value does not
      * match.
+     *
+     * @param actual        the value produced by the code under test
+     * @param expectedState whether the value is expected to be null or not null
+     * @param methodName    the name of the calling method, for logging
      */
     public void softAssertNullState(Object actual, NullState expectedState, String methodName) {
         if (expectedState == NullState.NULL) {
@@ -136,6 +174,10 @@ public class AssertionActions {
      * contain, and the name of the calling method for logging. Stops the
      * test immediately if the actual string is null or does not contain
      * the substring.
+     *
+     * @param actual             the string produced by the code under test
+     * @param expectedSubstring  the substring the actual string must contain
+     * @param methodName         the name of the calling method, for logging
      */
     public void assertContains(String actual, String expectedSubstring, String methodName) {
         Assert.assertTrue(actual != null && actual.contains(expectedSubstring),
@@ -149,6 +191,10 @@ public class AssertionActions {
      * contain, and the name of the calling method for logging. Records a
      * failure without stopping the test if the actual string is null or
      * does not contain the substring.
+     *
+     * @param actual            the string produced by the code under test
+     * @param expectedSubstring the substring the actual string must contain
+     * @param methodName        the name of the calling method, for logging
      */
     public void softAssertContains(String actual, String expectedSubstring, String methodName) {
         softAssert.assertTrue(actual != null && actual.contains(expectedSubstring),
@@ -162,6 +208,10 @@ public class AssertionActions {
      * string, the expected string, and the name of the calling method for
      * logging. Stops the test immediately if the actual string is null or
      * does not match, ignoring case.
+     *
+     * @param actual     the string produced by the code under test
+     * @param expected   the string the actual value should equal, ignoring case
+     * @param methodName the name of the calling method, for logging
      */
     public void assertEqualsIgnoreCase(String actual, String expected, String methodName) {
         Assert.assertTrue(actual != null && actual.equalsIgnoreCase(expected),
@@ -175,6 +225,10 @@ public class AssertionActions {
      * string, the expected string, and the name of the calling method for
      * logging. Records a failure without stopping the test if the actual
      * string is null or does not match, ignoring case.
+     *
+     * @param actual     the string produced by the code under test
+     * @param expected   the string the actual value should equal, ignoring case
+     * @param methodName the name of the calling method, for logging
      */
     public void softAssertEqualsIgnoreCase(String actual, String expected, String methodName) {
         softAssert.assertTrue(actual != null && actual.equalsIgnoreCase(expected),
@@ -187,6 +241,9 @@ public class AssertionActions {
      * of the calling method and the reason the test should fail. Use this
      * when the code has already worked out that a test should fail,
      * rather than comparing two values.
+     *
+     * @param methodName the name of the calling method, for logging
+     * @param reason     the reason the test should fail
      */
     public void failTest(String methodName, String reason) {
         LoggerUtil.info(methodName + " failed explicitly: " + reason);
@@ -197,6 +254,9 @@ public class AssertionActions {
      * Records a soft failure with the given reason, without stopping the
      * test. Expects the name of the calling method and the reason for the
      * failure.
+     *
+     * @param methodName the name of the calling method, for logging
+     * @param reason     the reason for the failure
      */
     public void softFailTest(String methodName, String reason) {
         LoggerUtil.info(methodName + " failed explicitly (soft): " + reason);
@@ -209,6 +269,10 @@ public class AssertionActions {
      * contain, and the name of the calling method for logging. Stops the
      * test immediately if the actual string is null or contains the
      * substring.
+     *
+     * @param actual               the string produced by the code under test
+     * @param unexpectedSubstring  the substring the actual string must not contain
+     * @param methodName           the name of the calling method, for logging
      */
     public void assertNotContains(String actual, String unexpectedSubstring, String methodName) {
         Assert.assertTrue(actual != null && !actual.contains(unexpectedSubstring),
@@ -222,6 +286,10 @@ public class AssertionActions {
      * contain, and the name of the calling method for logging. Records a
      * failure without stopping the test if the actual string is null or
      * contains the substring.
+     *
+     * @param actual              the string produced by the code under test
+     * @param unexpectedSubstring the substring the actual string must not contain
+     * @param methodName          the name of the calling method, for logging
      */
     public void softAssertNotContains(String actual, String unexpectedSubstring, String methodName) {
         softAssert.assertTrue(actual != null && !actual.contains(unexpectedSubstring),
@@ -235,6 +303,11 @@ public class AssertionActions {
      * against, and the name of the calling method for logging. Stops the
      * test immediately if the actual value is not greater than the
      * threshold.
+     *
+     * @param <T>        the comparable type being checked
+     * @param actual     the value produced by the code under test
+     * @param threshold  the value the actual value must be greater than
+     * @param methodName the name of the calling method, for logging
      */
     public <T extends Comparable<T>> void assertGreaterThan(T actual, T threshold, String methodName) {
         Assert.assertTrue(actual.compareTo(threshold) > 0,
@@ -248,6 +321,11 @@ public class AssertionActions {
      * against, and the name of the calling method for logging. Stops the
      * test immediately if the actual value is not less than the
      * threshold.
+     *
+     * @param <T>        the comparable type being checked
+     * @param actual     the value produced by the code under test
+     * @param threshold  the value the actual value must be less than
+     * @param methodName the name of the calling method, for logging
      */
     public <T extends Comparable<T>> void assertLessThan(T actual, T threshold, String methodName) {
         Assert.assertTrue(actual.compareTo(threshold) < 0,
@@ -260,6 +338,10 @@ public class AssertionActions {
      * Expects the collection to check, the size it should have, and the
      * name of the calling method for logging. Stops the test immediately
      * if the collection's size does not match.
+     *
+     * @param actual       the collection produced by the code under test
+     * @param expectedSize the size the collection should have
+     * @param methodName   the name of the calling method, for logging
      */
     public void assertSizeEquals(java.util.Collection<?> actual, int expectedSize, String methodName) {
         Assert.assertEquals(actual.size(), expectedSize,
@@ -273,6 +355,10 @@ public class AssertionActions {
      * empty state, and the name of the calling method for logging. Stops
      * the test immediately if the actual string is null or does not
      * match the expected state.
+     *
+     * @param actual        the string produced by the code under test
+     * @param expectedState whether the string is expected to be empty or non-empty
+     * @param methodName    the name of the calling method, for logging
      */
     public void assertEmptyState(String actual, EmptyState expectedState, String methodName) {
         if (expectedState == EmptyState.EMPTY) {

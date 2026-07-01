@@ -10,7 +10,15 @@ import org.testng.Reporter;
  */
 public class TestNgReporter implements TestReporter {
     /**
+     * Creates a reporter that logs messages to TestNG's own reporter.
+     */
+    public TestNgReporter() {
+    }
+
+    /**
      * Logs the message to TestNG's reporter with an [INFO] prefix.
+     *
+     * @param message the message to log
      */
     @Override
     public void info(String message) {
@@ -19,6 +27,8 @@ public class TestNgReporter implements TestReporter {
 
     /**
      * Logs the message to TestNG's reporter with a [WARNING] prefix.
+     *
+     * @param message the message to log
      */
     @Override
     public void warning(String message) {
@@ -27,6 +37,8 @@ public class TestNgReporter implements TestReporter {
 
     /**
      * Logs the message to TestNG's reporter with an [ERROR] prefix.
+     *
+     * @param message the message to log
      */
     @Override
     public void error(String message) {
@@ -36,6 +48,9 @@ public class TestNgReporter implements TestReporter {
     /**
      * Logs the message and the exception's own message to TestNG's
      * reporter with an [ERROR] prefix.
+     *
+     * @param message the message to log
+     * @param throwable the exception whose message should be appended to the log entry
      */
     @Override
     public void error(String message, Throwable throwable) {

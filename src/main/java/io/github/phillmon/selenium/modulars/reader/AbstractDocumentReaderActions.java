@@ -13,6 +13,7 @@ import java.util.List;
  * reader only needs to implement extractText for its own file format.
  */
 public abstract class AbstractDocumentReaderActions {
+    /** The downloader used to resolve and save documents to disk. */
     protected final DocumentDownloader downloader;
     private final String fileExtension;
 
@@ -21,6 +22,9 @@ public abstract class AbstractDocumentReaderActions {
      * extension its documents are saved with. Expects a non-null
      * DocumentDownloader and the file extension for this reader's format,
      * such as "pdf" or "xlsx".
+     *
+     * @param downloader    the downloader this reader will use to fetch documents
+     * @param fileExtension the file extension for this reader's format, without a leading dot
      */
     protected AbstractDocumentReaderActions(DocumentDownloader downloader, String fileExtension) {
         this.downloader = downloader;
@@ -32,6 +36,10 @@ public abstract class AbstractDocumentReaderActions {
      * to the file on disk. Returns the extracted text. Each concrete
      * reader implements this differently depending on the file format,
      * and may throw any exception while parsing the file.
+     *
+     * @param filePath the path to the downloaded file on disk
+     * @return the extracted text content
+     * @throws Exception if the file cannot be parsed
      */
     protected abstract String extractText(Path filePath) throws Exception;
 
@@ -40,6 +48,10 @@ public abstract class AbstractDocumentReaderActions {
      * downloader's default directory. Expects the document source and
      * the name of the calling method for logging. Returns the path to
      * the downloaded (or already existing) file.
+     *
+     * @param source     the document source to download
+     * @param methodName the name of the calling method, for logging
+     * @return the path to the downloaded (or already existing) file
      */
     public Path download(DocumentSource source, String methodName) {
         return downloader.resolve(source, fileExtension, methodName);
@@ -50,6 +62,11 @@ public abstract class AbstractDocumentReaderActions {
      * directory. Expects the document source, the directory to save into,
      * and the name of the calling method for logging. Returns the path to
      * the downloaded (or already existing) file.
+     *
+     * @param source          the document source to download
+     * @param targetDirectory the directory to save the document into
+     * @param methodName      the name of the calling method, for logging
+     * @return the path to the downloaded (or already existing) file
      */
     public Path download(DocumentSource source, Path targetDirectory, String methodName) {
         return downloader.resolve(source, fileExtension, targetDirectory, methodName);
@@ -60,6 +77,10 @@ public abstract class AbstractDocumentReaderActions {
      * Expects the path to the file and the name of the calling method for
      * logging. Returns the extracted text. Throws a ReaderException if
      * the file cannot be read or parsed.
+     *
+     * @param filePath   the path to the downloaded file
+     * @param methodName the name of the calling method, for logging
+     * @return the extracted text content
      */
     public String readText(Path filePath, String methodName) {
         try {
@@ -78,6 +99,10 @@ public abstract class AbstractDocumentReaderActions {
      * source did not already point at an existing file, the downloaded
      * file is deleted again afterwards to avoid leaving temporary files
      * behind.
+     *
+     * @param source     the document source to download and read
+     * @param methodName the name of the calling method, for logging
+     * @return the extracted text content
      */
     public String readText(DocumentSource source, String methodName) {
         Path filePath = download(source, methodName);
@@ -96,6 +121,10 @@ public abstract class AbstractDocumentReaderActions {
      * present, and the name of the calling method for logging. Throws a
      * ReaderException if the document does not contain the expected
      * text.
+     *
+     * @param source       the document source to download and read
+     * @param expectedText the text expected to be present in the document
+     * @param methodName   the name of the calling method, for logging
      */
     public void assertContainsText(DocumentSource source, String expectedText, String methodName) {
         String content = readText(source, methodName);
@@ -110,6 +139,10 @@ public abstract class AbstractDocumentReaderActions {
      * the given phrase. Expects the document source, the text that must
      * not be present, and the name of the calling method for logging.
      * Throws a ReaderException if the document contains the text anyway.
+     *
+     * @param source       the document source to download and read
+     * @param expectedText the text that must not be present in the document
+     * @param methodName   the name of the calling method, for logging
      */
     public void assertNotContainsText(DocumentSource source, String expectedText, String methodName) {
         String content = readText(source, methodName);
@@ -125,6 +158,10 @@ public abstract class AbstractDocumentReaderActions {
      * texts that must all be present, and the name of the calling method
      * for logging. Throws a ReaderException listing whichever phrases
      * were missing, if any were.
+     *
+     * @param source        the document source to download and read
+     * @param expectedTexts the texts that must all be present in the document
+     * @param methodName    the name of the calling method, for logging
      */
     public void assertContainsAllTexts(DocumentSource source, List<String> expectedTexts, String methodName) {
         String content = readText(source, methodName);
@@ -141,6 +178,10 @@ public abstract class AbstractDocumentReaderActions {
      * list of texts where any one of them being present is enough, and
      * the name of the calling method for logging. Throws a
      * ReaderException if none of the phrases are found.
+     *
+     * @param source        the document source to download and read
+     * @param expectedTexts the texts where at least one must be present in the document
+     * @param methodName    the name of the calling method, for logging
      */
     public void assertContainsAnyText(DocumentSource source, List<String> expectedTexts, String methodName) {
         String content = readText(source, methodName);
@@ -154,6 +195,9 @@ public abstract class AbstractDocumentReaderActions {
     /**
      * Deletes a downloaded file. Expects the path to the file and the
      * name of the calling method for logging.
+     *
+     * @param filePath   the path to the file to delete
+     * @param methodName the name of the calling method, for logging
      */
     public void delete(Path filePath, String methodName) {
         downloader.delete(filePath, methodName);

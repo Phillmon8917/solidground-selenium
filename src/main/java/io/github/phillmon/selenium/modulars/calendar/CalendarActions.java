@@ -31,6 +31,10 @@ public class CalendarActions {
      * WebDriver for the current browser session, the locators describing
      * the calendar widget, and how long to wait for calendar elements to
      * appear or become clickable.
+     *
+     * @param driver   the WebDriver for the current browser session
+     * @param locators the locators describing the calendar widget
+     * @param timeout  how long to wait for calendar elements to appear or become clickable
      */
     public CalendarActions(WebDriver driver, CalendarLocators locators, Duration timeout) {
         this.driver = driver;
@@ -42,6 +46,9 @@ public class CalendarActions {
      * Creates the calendar actions using a default timeout of 30 seconds.
      * Expects the WebDriver for the current browser session and the
      * locators describing the calendar widget.
+     *
+     * @param driver   the WebDriver for the current browser session
+     * @param locators the locators describing the calendar widget
      */
     public CalendarActions(WebDriver driver, CalendarLocators locators) {
         this(driver, locators, Duration.ofSeconds(30));
@@ -53,6 +60,10 @@ public class CalendarActions {
      * calendar for logging, and the name of the calling method. Throws a
      * CalendarNavigationException if the calendar cannot reach the target
      * month or the day cannot be found.
+     *
+     * @param targetDate  the date to select
+     * @param elementName a readable name for the calendar, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void selectDate(DateObject targetDate, String elementName, String methodName) {
         YearMonth targetMonth = YearMonth.of(targetDate.getYear(), targetDate.getMonthValue());
@@ -69,6 +80,10 @@ public class CalendarActions {
      * Expects the number of days to offset from today, which can be
      * negative for a date in the past, a readable name for the calendar
      * for logging, and the name of the calling method.
+     *
+     * @param offsetDays  the number of days to offset from today, which can be negative for a date in the past
+     * @param elementName a readable name for the calendar, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void selectDate(int offsetDays, String elementName, String methodName) {
         selectDate(DateOffset.resolve(offsetDays), elementName, methodName);

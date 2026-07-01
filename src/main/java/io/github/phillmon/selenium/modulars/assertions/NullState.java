@@ -6,6 +6,12 @@ package io.github.phillmon.selenium.modulars.assertions;
  * of the two states an assertion should check for.
  */
 public enum NullState {
+    /**
+     * The value is expected to be null.
+     */
     NULL,
+    /**
+     * The value is expected to be not null.
+     */
     NOT_NULL
 }

@@ -26,6 +26,8 @@ public class MouseActions {
     /**
      * Creates the mouse actions using a default timeout of 10 seconds.
      * Expects the WebDriver for the current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public MouseActions(WebDriver driver) {
         this(driver, Duration.ofSeconds(10));
@@ -35,6 +37,9 @@ public class MouseActions {
      * Creates the mouse actions with a custom timeout. Expects the
      * WebDriver for the current browser session and how long to wait for
      * elements to reach the expected state.
+     *
+     * @param driver  the WebDriver for the current browser session
+     * @param timeout how long to wait for elements to reach the expected state
      */
     public MouseActions(WebDriver driver, Duration timeout) {
         this.driver = driver;
@@ -45,6 +50,10 @@ public class MouseActions {
      * Clicks an element using the Actions builder rather than a plain
      * Selenium click. Expects the locator for the element, a readable
      * name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to click
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void click(By locator, String elementName, String methodName) {
         WebElement element = waitForClickable(locator, elementName, methodName);
@@ -55,6 +64,10 @@ public class MouseActions {
     /**
      * Double clicks an element. Expects the locator for the element, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to double click
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void doubleClick(By locator, String elementName, String methodName) {
         WebElement element = waitForClickable(locator, elementName, methodName);
@@ -66,6 +79,10 @@ public class MouseActions {
      * Right clicks an element to open its context menu. Expects the
      * locator for the element, a readable name for logging, and the name
      * of the calling method.
+     *
+     * @param locator     the locator for the element to right click
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void rightClick(By locator, String elementName, String methodName) {
         WebElement element = waitForClickable(locator, elementName, methodName);
@@ -78,6 +95,10 @@ public class MouseActions {
      * releasing it. Expects the locator for the element, a readable name
      * for logging, and the name of the calling method. Call release
      * afterwards to let go of the mouse button.
+     *
+     * @param locator     the locator for the element to press and hold
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void clickAndHold(By locator, String elementName, String methodName) {
         WebElement element = waitForClickable(locator, elementName, methodName);
@@ -88,6 +109,8 @@ public class MouseActions {
     /**
      * Releases the mouse button after a clickAndHold. Expects the name of
      * the calling method for logging.
+     *
+     * @param methodName the name of the calling method, for logging
      */
     public void release(String methodName) {
         new Actions(driver).release().perform();
@@ -99,6 +122,10 @@ public class MouseActions {
      * revealing hover menus or tooltips. Expects the locator for the
      * element, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to hover over
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void hover(By locator, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -112,6 +139,12 @@ public class MouseActions {
      * locator and readable name of the element to hover over, the locator
      * and readable name of the element to click, and the name of the
      * calling method.
+     *
+     * @param hoverLocator     the locator for the element to hover over
+     * @param hoverElementName a readable name for the element hovered over, for logging
+     * @param clickLocator     the locator for the element to click
+     * @param clickElementName a readable name for the element clicked, for logging
+     * @param methodName       the name of the calling method, for logging
      */
     public void hoverAndClick(By hoverLocator, String hoverElementName, By clickLocator, String clickElementName, String methodName) {
         WebElement hoverElement = waitForVisible(hoverLocator, hoverElementName, methodName);
@@ -133,6 +166,10 @@ public class MouseActions {
      * over in order. Throws a MouseActionException if no locators are
      * given, or if the number of names does not match the number of
      * locators.
+     *
+     * @param methodName   the name of the calling method, for logging
+     * @param elementNames a list of readable names matching each locator, for logging
+     * @param locators     the locators to hover over, in order
      */
     public void hoverChain(String methodName, List<String> elementNames, By... locators) {
         if (locators == null || locators.length == 0) {
@@ -156,6 +193,12 @@ public class MouseActions {
      * instead of clicking its centre directly. Expects the locator for
      * the element, the horizontal and vertical offset in pixels, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to click at an offset
+     * @param xOffset     the horizontal offset in pixels from the element's centre
+     * @param yOffset     the vertical offset in pixels from the element's centre
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void clickAtOffset(By locator, int xOffset, int yOffset, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -171,6 +214,10 @@ public class MouseActions {
      * Moves the mouse pointer by a given horizontal and vertical amount
      * from its current position. Expects the horizontal and vertical
      * offset in pixels and the name of the calling method for logging.
+     *
+     * @param xOffset    the horizontal offset in pixels to move the mouse by
+     * @param yOffset    the vertical offset in pixels to move the mouse by
+     * @param methodName the name of the calling method, for logging
      */
     public void moveByOffset(int xOffset, int yOffset, String methodName) {
         new Actions(driver).moveByOffset(xOffset, yOffset).perform();
@@ -182,6 +229,12 @@ public class MouseActions {
      * and readable name of the element being dragged, the locator and
      * readable name of the drop target, and the name of the calling
      * method.
+     *
+     * @param sourceLocator     the locator for the element being dragged
+     * @param sourceElementName a readable name for the element being dragged, for logging
+     * @param targetLocator     the locator for the drop target
+     * @param targetElementName a readable name for the drop target, for logging
+     * @param methodName        the name of the calling method, for logging
      */
     public void dragAndDrop(By sourceLocator, String sourceElementName, By targetLocator, String targetElementName, String methodName) {
         WebElement source = waitForVisible(sourceLocator, sourceElementName, methodName);
@@ -196,6 +249,12 @@ public class MouseActions {
      * element. Expects the locator for the element being dragged, the
      * horizontal and vertical offset in pixels, a readable name for
      * logging, and the name of the calling method.
+     *
+     * @param sourceLocator     the locator for the element being dragged
+     * @param xOffset           the horizontal offset in pixels to drag the element by
+     * @param yOffset           the vertical offset in pixels to drag the element by
+     * @param sourceElementName a readable name for the element being dragged, for logging
+     * @param methodName        the name of the calling method, for logging
      */
     public void dragAndDropByOffset(By sourceLocator, int xOffset, int yOffset, String sourceElementName, String methodName) {
         WebElement source = waitForVisible(sourceLocator, sourceElementName, methodName);
@@ -211,6 +270,13 @@ public class MouseActions {
      * Expects the locator and readable name of the element being dragged,
      * the locator and readable name of the drop target, how many steps to
      * move it in, and the name of the calling method.
+     *
+     * @param sourceLocator     the locator for the element being dragged
+     * @param sourceElementName a readable name for the element being dragged, for logging
+     * @param targetLocator     the locator for the drop target
+     * @param targetElementName a readable name for the drop target, for logging
+     * @param steps             how many steps to move the element in
+     * @param methodName        the name of the calling method, for logging
      */
     public void dragAndDropSlowly(By sourceLocator, String sourceElementName, By targetLocator, String targetElementName, int steps, String methodName) {
         WebElement source = waitForVisible(sourceLocator, sourceElementName, methodName);
@@ -234,6 +300,10 @@ public class MouseActions {
      * builder's native scrolling support. Expects the locator for the
      * element, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to scroll to
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void scrollToElement(By locator, String elementName, String methodName) {
         WebElement element = waitForPresent(locator, elementName, methodName);
@@ -246,6 +316,10 @@ public class MouseActions {
      * wherever the mouse currently is. Expects the horizontal and
      * vertical scroll amount and the name of the calling method for
      * logging.
+     *
+     * @param deltaX     the horizontal amount to scroll by
+     * @param deltaY     the vertical amount to scroll by
+     * @param methodName the name of the calling method, for logging
      */
     public void scrollByAmount(int deltaX, int deltaY, String methodName) {
         new Actions(driver).scrollByAmount(deltaX, deltaY).perform();
@@ -258,6 +332,12 @@ public class MouseActions {
      * locator for the element to scroll from, the horizontal and vertical
      * scroll amount, a readable name for logging, and the name of the
      * calling method.
+     *
+     * @param locator     the locator for the element to scroll from
+     * @param deltaX      the horizontal amount to scroll by
+     * @param deltaY      the vertical amount to scroll by
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void scrollFromElement(By locator, int deltaX, int deltaY, String elementName, String methodName) {
         WebElement element = waitForPresent(locator, elementName, methodName);

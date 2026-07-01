@@ -19,6 +19,8 @@ public class EnvLoader {
      * Returns the admin username configured for the tests. Looks it up
      * under the key ADMIN_USERNAME. Throws an IllegalStateException if it
      * is not set anywhere.
+     *
+     * @return the configured admin username
      */
     public static String getAdminUsername(){
         return get("ADMIN_USERNAME");
@@ -28,6 +30,8 @@ public class EnvLoader {
      * Returns the admin password configured for the tests. Looks it up
      * under the key ADMIN_PASSWORD. Throws an IllegalStateException if it
      * is not set anywhere.
+     *
+     * @return the configured admin password
      */
     public static String getAdminPassword(){
         return get("ADMIN_PASSWORD");
@@ -37,6 +41,8 @@ public class EnvLoader {
      * Returns the base url the tests should run against. Looks it up
      * under the key URL. Throws an IllegalStateException if it is not
      * set anywhere.
+     *
+     * @return the configured base url
      */
     public static String getUrl(){
         return get("URL");
@@ -49,6 +55,9 @@ public class EnvLoader {
      * properties, and returns the first value found. Throws an
      * IllegalStateException if the property is not found in any of
      * those three places.
+     *
+     * @param property the name of the property to look up
+     * @return the resolved value of the property
      */
     public static String get(String property){
         String value = dotenv.get(property);

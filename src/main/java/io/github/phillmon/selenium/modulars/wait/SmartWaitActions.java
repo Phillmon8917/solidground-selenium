@@ -37,6 +37,8 @@ public class SmartWaitActions {
      * every 250 milliseconds, requiring 3 matching checks in a row, and an
      * overall timeout of 10 seconds. Expects the WebDriver for the
      * current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public SmartWaitActions(WebDriver driver) {
         this(driver, Duration.ofMillis(250), 3, Duration.ofSeconds(10));
@@ -47,6 +49,9 @@ public class SmartWaitActions {
      * the default poll interval of 250 milliseconds and requiring 3
      * matching checks in a row. Expects the WebDriver for the current
      * browser session and how long to wait for a value to stabilize.
+     *
+     * @param driver  the WebDriver for the current browser session
+     * @param timeout how long to wait overall for a value to stabilize
      */
     public SmartWaitActions(WebDriver driver, Duration timeout) {
         this(driver, Duration.ofMillis(250), 3, timeout);
@@ -58,6 +63,11 @@ public class SmartWaitActions {
      * how often to re-check the value, how many matching checks in a row
      * are needed before the value counts as stable, and the overall
      * timeout.
+     *
+     * @param driver               the WebDriver for the current browser session
+     * @param pollInterval         how often to re-check the value while waiting
+     * @param requiredStableChecks how many matching checks in a row are needed before the value counts as stable
+     * @param timeout              how long to wait overall for a value to stabilize
      */
     public SmartWaitActions(WebDriver driver, Duration pollInterval, int requiredStableChecks, Duration timeout) {
         this.driver = driver;
@@ -71,6 +81,11 @@ public class SmartWaitActions {
      * treating the value as sensitive in the log. Expects the locator for
      * the input, a readable name for logging, and the name of the calling
      * method. Returns the stabilized value.
+     *
+     * @param locator     the locator for the input element to watch
+     * @param elementName a readable name for the element, used in log and error messages
+     * @param methodName  the name of the calling method, for logging
+     * @return the stabilized input value
      */
     public String waitForInputValueToStabilize(By locator, String elementName, String methodName) {
         return waitForInputValueToStabilize(locator, false, elementName, methodName);
@@ -83,6 +98,12 @@ public class SmartWaitActions {
      * the calling method. Returns the stabilized value. Throws a
      * WaitStabilizationException if the value never settles within the
      * configured timeout.
+     *
+     * @param locator     the locator for the input element to watch
+     * @param sensitive   whether the value is sensitive and should be hidden from the log
+     * @param elementName a readable name for the element, used in log and error messages
+     * @param methodName  the name of the calling method, for logging
+     * @return the stabilized input value
      */
     public String waitForInputValueToStabilize(By locator, boolean sensitive, String elementName, String methodName) {
         return waitUntilStable(
@@ -96,6 +117,11 @@ public class SmartWaitActions {
      * of the calling method. Returns the stabilized text. Throws a
      * WaitStabilizationException if the text never settles within the
      * configured timeout.
+     *
+     * @param locator     the locator for the element to watch
+     * @param elementName a readable name for the element, used in log and error messages
+     * @param methodName  the name of the calling method, for logging
+     * @return the stabilized visible text
      */
     public String waitForTextToStabilize(By locator, String elementName, String methodName) {
         return waitUntilStable(
@@ -110,6 +136,12 @@ public class SmartWaitActions {
      * Returns the stabilized attribute value. Throws a
      * WaitStabilizationException if the value never settles within the
      * configured timeout.
+     *
+     * @param locator     the locator for the element to watch
+     * @param attribute   the name of the attribute to watch
+     * @param elementName a readable name for the element, used in log and error messages
+     * @param methodName  the name of the calling method, for logging
+     * @return the stabilized attribute value
      */
     public String waitForAttributeToStabilize(By locator, String attribute, String elementName, String methodName) {
         return waitUntilStable(
@@ -124,6 +156,11 @@ public class SmartWaitActions {
      * the calling method. Returns the stabilized count. Throws a
      * WaitStabilizationException if the count never settles within the
      * configured timeout.
+     *
+     * @param locator     the locator whose matching elements should be counted
+     * @param elementName a readable name for the elements, used in log and error messages
+     * @param methodName  the name of the calling method, for logging
+     * @return the stabilized element count
      */
     public int waitForElementCountToStabilize(By locator, String elementName, String methodName) {
         return waitUntilStable(
@@ -137,6 +174,10 @@ public class SmartWaitActions {
      * locator for the element, a readable name for logging, and the name
      * of the calling method. Throws a WaitStabilizationException if the
      * element never settles within the configured timeout.
+     *
+     * @param locator     the locator for the element to watch
+     * @param elementName a readable name for the element, used in log and error messages
+     * @param methodName  the name of the calling method, for logging
      */
     public void waitForElementToStopMoving(By locator, String elementName, String methodName) {
         waitUntilStable(() -> {
@@ -152,6 +193,12 @@ public class SmartWaitActions {
      * name of the calling method. Returns the parsed DateObject. Throws a
      * WaitStabilizationException if the stabilized value cannot be parsed
      * as a valid date in the expected format.
+     *
+     * @param locator     the locator for the date input to watch
+     * @param format      the date format the input uses
+     * @param elementName a readable name for the element, used in log and error messages
+     * @param methodName  the name of the calling method, for logging
+     * @return the parsed date once the input value has stabilized
      */
     public DateObject waitForDateInputToStabilize(By locator, DateFormat format, String elementName, String methodName) {
         String stableValue = waitForInputValueToStabilize(locator, elementName, methodName);
@@ -176,6 +223,11 @@ public class SmartWaitActions {
      * logging. Returns the completed file. Throws a
      * WaitStabilizationException if no matching completed file appears
      * within the configured timeout.
+     *
+     * @param downloadDirectory the folder to watch for the downloaded file
+     * @param fileNamePattern   a regular expression the final file name must match
+     * @param methodName        the name of the calling method, for logging
+     * @return the completed, stabilized file
      */
     public File waitForFileDownloadToComplete(Path downloadDirectory, String fileNamePattern, String methodName) {
         Pattern pattern = Pattern.compile(fileNamePattern);

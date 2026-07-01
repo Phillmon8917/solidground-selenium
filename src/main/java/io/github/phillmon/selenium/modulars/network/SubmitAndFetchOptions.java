@@ -27,6 +27,10 @@ public class SubmitAndFetchOptions {
      * submit, and the response expected for the fetch. Throws an
      * InvalidNetworkExpectationException if the actions are missing or
      * either response expectation is null.
+     *
+     * @param actions        the actions to run, such as clicking a submit button; must not be null or empty
+     * @param submitResponse the response expected to confirm the submit succeeded; must not be null
+     * @param fetchResponse  the response expected when fetching the result of the submit; must not be null
      */
     public SubmitAndFetchOptions(List<Runnable> actions, ResponseExpectation submitResponse, ResponseExpectation fetchResponse) {
         this(actions, submitResponse, fetchResponse, NetworkDefaults.DEFAULT_TIMEOUT,
@@ -40,6 +44,11 @@ public class SubmitAndFetchOptions {
      * fetch, and how long to wait for the submit response. Throws an
      * InvalidNetworkExpectationException if the actions are missing or
      * either response expectation is null.
+     *
+     * @param actions        the actions to run, such as clicking a submit button; must not be null or empty
+     * @param submitResponse the response expected to confirm the submit succeeded; must not be null
+     * @param fetchResponse  the response expected when fetching the result of the submit; must not be null
+     * @param timeout        how long to wait for the submit response, or null to use the default
      */
     public SubmitAndFetchOptions(List<Runnable> actions, ResponseExpectation submitResponse,
                                  ResponseExpectation fetchResponse, Duration timeout) {
@@ -56,6 +65,13 @@ public class SubmitAndFetchOptions {
      * for the fetch response after that refresh. Throws an
      * InvalidNetworkExpectationException if the actions are missing or
      * either response expectation is null.
+     *
+     * @param actions         the actions to run, such as clicking a submit button; must not be null or empty
+     * @param submitResponse  the response expected to confirm the submit succeeded; must not be null
+     * @param fetchResponse   the response expected when fetching the result of the submit; must not be null
+     * @param timeout         how long to wait for the submit response, or null to use the default
+     * @param fetchRetryDelay how long to wait for the fetch response before giving up and refreshing the page, or null to use the default
+     * @param reloadTimeout   how long to wait for the fetch response after the page has been refreshed, or null to use the default
      */
     public SubmitAndFetchOptions(List<Runnable> actions, ResponseExpectation submitResponse, ResponseExpectation fetchResponse,
                                  Duration timeout, Duration fetchRetryDelay, Duration reloadTimeout) {
@@ -76,6 +92,8 @@ public class SubmitAndFetchOptions {
     /**
      * Returns the actions that should be run, such as clicking a submit
      * button.
+     *
+     * @return the actions to run
      */
     public List<Runnable> getActions() {
         return actions;
@@ -83,6 +101,8 @@ public class SubmitAndFetchOptions {
 
     /**
      * Returns the response expected to confirm the submit succeeded.
+     *
+     * @return the expected submit response
      */
     public ResponseExpectation getSubmitResponse() {
         return submitResponse;
@@ -91,6 +111,8 @@ public class SubmitAndFetchOptions {
     /**
      * Returns the response expected when fetching the result of the
      * submit.
+     *
+     * @return the expected fetch response
      */
     public ResponseExpectation getFetchResponse() {
         return fetchResponse;
@@ -98,6 +120,8 @@ public class SubmitAndFetchOptions {
 
     /**
      * Returns how long to wait for the submit response.
+     *
+     * @return the submit response timeout
      */
     public Duration getTimeout() {
         return timeout;
@@ -106,6 +130,8 @@ public class SubmitAndFetchOptions {
     /**
      * Returns how long to wait for the fetch response before giving up
      * and refreshing the page to try again.
+     *
+     * @return the fetch retry delay
      */
     public Duration getFetchRetryDelay() {
         return fetchRetryDelay;
@@ -114,6 +140,8 @@ public class SubmitAndFetchOptions {
     /**
      * Returns how long to wait for the fetch response after the page has
      * been refreshed.
+     *
+     * @return the reload timeout
      */
     public Duration getReloadTimeout() {
         return reloadTimeout;

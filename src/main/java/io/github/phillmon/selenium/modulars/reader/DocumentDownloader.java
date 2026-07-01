@@ -35,6 +35,8 @@ public class DocumentDownloader {
      * Creates the downloader using the system's temp folder as the
      * default download directory and a request timeout of 30 seconds.
      * Expects the WebDriver for the current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public DocumentDownloader(WebDriver driver) {
         this(driver, Path.of(System.getProperty("java.io.tmpdir")), Duration.ofSeconds(30));
@@ -45,6 +47,9 @@ public class DocumentDownloader {
      * a request timeout of 30 seconds. Expects the WebDriver for the
      * current browser session and the folder documents should be saved
      * into by default.
+     *
+     * @param driver           the WebDriver for the current browser session
+     * @param defaultDirectory the folder documents should be saved into by default
      */
     public DocumentDownloader(WebDriver driver, Path defaultDirectory) {
         this(driver, defaultDirectory, Duration.ofSeconds(30));
@@ -57,6 +62,10 @@ public class DocumentDownloader {
      * default, and how long to wait for a download request to complete.
      * Creates the default directory immediately if it does not already
      * exist.
+     *
+     * @param driver           the WebDriver for the current browser session
+     * @param defaultDirectory the folder documents should be saved into by default
+     * @param requestTimeout   how long to wait for a download request to complete
      */
     public DocumentDownloader(WebDriver driver, Path defaultDirectory, Duration requestTimeout) {
         this.driver = driver;
@@ -72,6 +81,11 @@ public class DocumentDownloader {
      * the name of the calling method for logging. Returns the path to the
      * resulting file, which may be the source's existing path if it
      * already pointed at one.
+     *
+     * @param source        the document source to resolve
+     * @param fileExtension the file extension to use for the saved file, without a leading dot
+     * @param methodName    the name of the calling method, for logging
+     * @return the path to the resulting file
      */
     public Path resolve(DocumentSource source, String fileExtension, String methodName) {
         return resolve(source, fileExtension, defaultDirectory, methodName);
@@ -84,6 +98,12 @@ public class DocumentDownloader {
      * directory to save into, and the name of the calling method for
      * logging. Returns the path to the resulting file, which may be the
      * source's existing path if it already pointed at one.
+     *
+     * @param source          the document source to resolve
+     * @param fileExtension   the file extension to use for the saved file, without a leading dot
+     * @param targetDirectory the directory to save the document into
+     * @param methodName      the name of the calling method, for logging
+     * @return the path to the resulting file
      */
     public Path resolve(DocumentSource source, String fileExtension, Path targetDirectory, String methodName) {
         if (source.hasExistingPath()) {
@@ -192,6 +212,9 @@ public class DocumentDownloader {
      * Deletes a downloaded file if it still exists. Expects the path to
      * the file and the name of the calling method for logging. Throws a
      * ReaderException if the file exists but cannot be deleted.
+     *
+     * @param filePath   the path to the file to delete
+     * @param methodName the name of the calling method, for logging
      */
     public void delete(Path filePath, String methodName) {
         try {

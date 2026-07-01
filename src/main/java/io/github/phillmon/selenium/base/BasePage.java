@@ -9,7 +9,9 @@ import org.openqa.selenium.WebDriver;
  * the modulars field, so a page object does not need to create these itself.
  */
 public abstract class BasePage {
+    /** The WebDriver instance controlling the browser session for this page. */
     protected final WebDriver driver;
+    /** The container giving access to every action group available to this page. */
     protected final ActionsContainer modulars;
 
     /**
@@ -18,6 +20,8 @@ public abstract class BasePage {
      * behaviour such as a different calendar layout or download folder.
      * Expects a non-null WebDriver that is already pointed at the browser
      * session the page object will control.
+     *
+     * @param driver the WebDriver instance for the browser session this page object will control
      */
     protected BasePage(WebDriver driver) {
         this(driver, PageModularOptions.defaults());
@@ -28,6 +32,9 @@ public abstract class BasePage {
      * Expects a non-null WebDriver and a non-null PageModularOptions object.
      * Throws an IllegalArgumentException if the driver is null, since a page
      * object cannot do anything useful without a browser session.
+     *
+     * @param driver  the WebDriver instance for the browser session this page object will control
+     * @param options the custom options to apply to every action group
      */
     protected BasePage(WebDriver driver, PageModularOptions options) {
         if (driver == null) {

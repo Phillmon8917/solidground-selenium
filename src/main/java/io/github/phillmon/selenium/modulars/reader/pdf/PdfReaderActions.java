@@ -20,6 +20,8 @@ public class PdfReaderActions extends AbstractDocumentReaderActions {
     /**
      * Creates the PDF reader using the given downloader, and configures
      * it to save downloaded documents with the .pdf extension.
+     *
+     * @param downloader the downloader this reader will use to fetch PDF documents
      */
     public PdfReaderActions(DocumentDownloader downloader) {
         super(downloader, "pdf");
@@ -29,6 +31,10 @@ public class PdfReaderActions extends AbstractDocumentReaderActions {
      * Extracts all readable text from every page of the PDF. Expects the
      * path to the PDF file. Returns the extracted text with leading and
      * trailing whitespace removed.
+     *
+     * @param filePath the path to the PDF file
+     * @return the extracted text with leading and trailing whitespace removed
+     * @throws IOException if the PDF file cannot be loaded or read
      */
     @Override
     protected String extractText(Path filePath) throws IOException {
@@ -41,6 +47,10 @@ public class PdfReaderActions extends AbstractDocumentReaderActions {
      * Returns how many pages a PDF file has. Expects the path to the PDF
      * file and the name of the calling method for logging. Throws a
      * ReaderException if the file cannot be opened or read.
+     *
+     * @param filePath   the path to the PDF file
+     * @param methodName the name of the calling method, for logging
+     * @return the number of pages in the PDF file
      */
     public int getPageCount(Path filePath, String methodName) {
         try (PDDocument document = Loader.loadPDF(filePath.toFile())) {

@@ -34,6 +34,8 @@ public class PageModularOptions {
     /**
      * Returns a configuration with every setting left at its default value.
      * Use this when a page object does not need any custom behaviour.
+     *
+     * @return a PageModularOptions instance with every setting at its default value
      */
     public static PageModularOptions defaults() {
         return builder().build();
@@ -42,6 +44,8 @@ public class PageModularOptions {
     /**
      * Returns a new Builder so a caller can set only the options it cares
      * about and leave the rest at their defaults.
+     *
+     * @return a new Builder for configuring a PageModularOptions instance
      */
     public static Builder builder() {
         return new Builder();
@@ -108,9 +112,20 @@ public class PageModularOptions {
         private Duration downloadTimeout;
 
         /**
+         * Creates a builder pre-populated with the default calendar
+         * locators and toggle state resolver, and no download directory,
+         * download timeout, or SoftAssert configured yet.
+         */
+        public Builder() {
+        }
+
+        /**
          * Sets the locators the calendar actions should use instead of the
          * default day picker locators. Expects a non-null CalendarLocators
          * and throws an IllegalArgumentException if null is passed in.
+         *
+         * @param calendarLocators the locators the calendar actions should use
+         * @return this builder, so calls can be chained
          */
         public Builder withCalendarLocators(CalendarLocators calendarLocators) {
             if (calendarLocators == null) {
@@ -125,6 +140,9 @@ public class PageModularOptions {
          * off, instead of the default aria-checked based strategy. Expects
          * a non-null ToggleStateResolver and throws an
          * IllegalArgumentException if null is passed in.
+         *
+         * @param toggleStateResolver the strategy used to read a toggle element's on/off state
+         * @return this builder, so calls can be chained
          */
         public Builder withToggleStateResolver(ToggleStateResolver toggleStateResolver) {
             if (toggleStateResolver == null) {
@@ -139,6 +157,9 @@ public class PageModularOptions {
          * instead of letting a new one be created automatically. Expects a
          * non-null SoftAssert and throws an IllegalArgumentException if
          * null is passed in.
+         *
+         * @param softAssert the SoftAssert instance the assertion actions should share
+         * @return this builder, so calls can be chained
          */
         public Builder withSoftAssert(SoftAssert softAssert) {
             if (softAssert == null) {
@@ -152,6 +173,9 @@ public class PageModularOptions {
          * Sets the folder that downloaded documents should be saved into.
          * Expects a non-null Path and throws an IllegalArgumentException if
          * null is passed in.
+         *
+         * @param downloadDirectory the folder that downloaded documents should be saved into
+         * @return this builder, so calls can be chained
          */
         public Builder withDownloadDirectory(Path downloadDirectory) {
             if (downloadDirectory == null) {
@@ -165,6 +189,9 @@ public class PageModularOptions {
          * Sets how long the reader actions should wait for a download to
          * finish before giving up. Expects a non-null Duration and throws
          * an IllegalArgumentException if null is passed in.
+         *
+         * @param downloadTimeout how long to wait for a download to finish before giving up
+         * @return this builder, so calls can be chained
          */
         public Builder withDownloadTimeout(Duration downloadTimeout) {
             if (downloadTimeout == null) {
@@ -177,6 +204,8 @@ public class PageModularOptions {
         /**
          * Creates the final, immutable PageModularOptions using whatever
          * settings were configured on this builder.
+         *
+         * @return the immutable PageModularOptions built from this builder's settings
          */
         public PageModularOptions build() {
             return new PageModularOptions(this);

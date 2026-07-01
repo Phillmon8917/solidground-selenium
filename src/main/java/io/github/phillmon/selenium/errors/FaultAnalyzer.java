@@ -22,6 +22,11 @@ public final class FaultAnalyzer {
      * The returned FaultDetails contains the current time, the source, the
      * context, the full class name of the exception, its message, and its
      * full stack trace as text.
+     *
+     * @param error   the exception that was raised
+     * @param source  the page object, class, or method the failure came from
+     * @param context extra caller-supplied detail about what was happening, may be null
+     * @return a FaultDetails record with all the collected information about the failure
      */
     public static FaultDetails createDetails(Throwable error, String source, String context) {
         return new FaultDetails(
@@ -39,6 +44,9 @@ public final class FaultAnalyzer {
      * own message, that message is returned as is. If the error has no
      * message, or the message is blank, the simple class name of the
      * error is returned instead so the caller always gets some text back.
+     *
+     * @param error the exception to read the message from
+     * @return the error's own message, or its simple class name if it has no message
      */
     public static String getMessage(Throwable error) {
         String message = error.getMessage();

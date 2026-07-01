@@ -25,6 +25,8 @@ public class KeyboardActions {
     /**
      * Creates the keyboard actions using a default timeout of 10 seconds.
      * Expects the WebDriver for the current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public KeyboardActions(WebDriver driver) {
         this(driver, Duration.ofSeconds(10));
@@ -34,6 +36,9 @@ public class KeyboardActions {
      * Creates the keyboard actions with a custom timeout. Expects the
      * WebDriver for the current browser session and how long to wait for
      * the target element to become visible.
+     *
+     * @param driver  the WebDriver for the current browser session
+     * @param timeout how long to wait for the target element to become visible
      */
     public KeyboardActions(WebDriver driver, Duration timeout) {
         this.driver = driver;
@@ -44,6 +49,11 @@ public class KeyboardActions {
      * Sends a single key press to an element. Expects the locator for the
      * element, the key to press, a readable name for logging, and the
      * name of the calling method.
+     *
+     * @param locator     the locator for the element to send the key to
+     * @param key         the key to press
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void pressKey(By locator, Keys key, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -55,6 +65,11 @@ public class KeyboardActions {
      * Sends several key presses to an element, one after another in the
      * order given. Expects the locator for the element, a readable name
      * for logging, the name of the calling method, and the keys to press.
+     *
+     * @param locator     the locator for the element to send the keys to
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
+     * @param keys        the keys to press, in order
      */
     public void pressKeys(By locator, String elementName, String methodName, Keys... keys) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -70,6 +85,12 @@ public class KeyboardActions {
      * for the element, the modifier key to hold, the other key in the
      * combination, a readable name for logging, and the name of the
      * calling method.
+     *
+     * @param locator     the locator for the element to send the chord to
+     * @param modifier    the modifier key to hold down
+     * @param key         the other key in the combination
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void pressChord(By locator, Keys modifier, String key, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -81,6 +102,10 @@ public class KeyboardActions {
      * Presses the Enter key on an element. Expects the locator for the
      * element, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to press Enter on
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void pressEnter(By locator, String elementName, String methodName) {
         pressKey(locator, Keys.ENTER, elementName, methodName);
@@ -90,6 +115,10 @@ public class KeyboardActions {
      * Presses the Tab key on an element. Expects the locator for the
      * element, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to press Tab on
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void pressTab(By locator, String elementName, String methodName) {
         pressKey(locator, Keys.TAB, elementName, methodName);
@@ -99,6 +128,10 @@ public class KeyboardActions {
      * Presses the Escape key on an element. Expects the locator for the
      * element, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to press Escape on
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void pressEscape(By locator, String elementName, String methodName) {
         pressKey(locator, Keys.ESCAPE, elementName, methodName);
@@ -108,6 +141,10 @@ public class KeyboardActions {
      * Selects all the text in an element using Ctrl+A. Expects the
      * locator for the element, a readable name for logging, and the name
      * of the calling method.
+     *
+     * @param locator     the locator for the element to select all text in
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void selectAll(By locator, String elementName, String methodName) {
         pressChord(locator, Keys.CONTROL, "a", elementName, methodName);
@@ -118,6 +155,10 @@ public class KeyboardActions {
      * Copies the current selection in an element using Ctrl+C. Expects
      * the locator for the element, a readable name for logging, and the
      * name of the calling method.
+     *
+     * @param locator     the locator for the element to copy from
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void copy(By locator, String elementName, String methodName) {
         pressChord(locator, Keys.CONTROL, "c", elementName, methodName);
@@ -127,6 +168,10 @@ public class KeyboardActions {
      * Cuts the current selection in an element using Ctrl+X. Expects the
      * locator for the element, a readable name for logging, and the name
      * of the calling method.
+     *
+     * @param locator     the locator for the element to cut from
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void cut(By locator, String elementName, String methodName) {
         pressChord(locator, Keys.CONTROL, "x", elementName, methodName);
@@ -136,6 +181,10 @@ public class KeyboardActions {
      * Pastes the clipboard contents into an element using Ctrl+V. Expects
      * the locator for the element, a readable name for logging, and the
      * name of the calling method.
+     *
+     * @param locator     the locator for the element to paste into
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void paste(By locator, String elementName, String methodName) {
         pressChord(locator, Keys.CONTROL, "v", elementName, methodName);
@@ -145,6 +194,10 @@ public class KeyboardActions {
      * Sends the undo shortcut Ctrl+Z to an element. Expects the locator
      * for the element, a readable name for logging, and the name of the
      * calling method.
+     *
+     * @param locator     the locator for the element to send undo to
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void undo(By locator, String elementName, String methodName) {
         pressChord(locator, Keys.CONTROL, "z", elementName, methodName);
@@ -154,6 +207,11 @@ public class KeyboardActions {
      * Presses backspace a given number of times on an element. Expects
      * the locator for the element, how many times to press backspace, a
      * readable name for logging, and the name of the calling method.
+     *
+     * @param locator     the locator for the element to press backspace on
+     * @param times       how many times to press backspace
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void backspace(By locator, int times, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);
@@ -168,6 +226,11 @@ public class KeyboardActions {
      * Expects the locator for the element, how many times to press the
      * key, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to press the down arrow on
+     * @param times       how many times to press the key
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void arrowDown(By locator, int times, String elementName, String methodName) {
         pressArrow(locator, Keys.ARROW_DOWN, times, elementName, methodName);
@@ -178,6 +241,11 @@ public class KeyboardActions {
      * Expects the locator for the element, how many times to press the
      * key, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to press the up arrow on
+     * @param times       how many times to press the key
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void arrowUp(By locator, int times, String elementName, String methodName) {
         pressArrow(locator, Keys.ARROW_UP, times, elementName, methodName);
@@ -188,6 +256,11 @@ public class KeyboardActions {
      * Expects the locator for the element, how many times to press the
      * key, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to press the left arrow on
+     * @param times       how many times to press the key
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void arrowLeft(By locator, int times, String elementName, String methodName) {
         pressArrow(locator, Keys.ARROW_LEFT, times, elementName, methodName);
@@ -198,6 +271,11 @@ public class KeyboardActions {
      * Expects the locator for the element, how many times to press the
      * key, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the element to press the right arrow on
+     * @param times       how many times to press the key
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void arrowRight(By locator, int times, String elementName, String methodName) {
         pressArrow(locator, Keys.ARROW_RIGHT, times, elementName, methodName);
@@ -208,6 +286,9 @@ public class KeyboardActions {
      * element, useful for shortcuts that are not tied to any input.
      * Expects the key to press and the name of the calling method for
      * logging.
+     *
+     * @param key        the key to press
+     * @param methodName the name of the calling method, for logging
      */
     public void pageGlobalKey(Keys key, String methodName) {
         new Actions(driver).sendKeys(key).perform();
@@ -219,6 +300,10 @@ public class KeyboardActions {
      * specific element. Expects the modifier key to hold, the other key
      * in the combination, and the name of the calling method for
      * logging.
+     *
+     * @param modifier   the modifier key to hold down
+     * @param key        the other key in the combination
+     * @param methodName the name of the calling method, for logging
      */
     public void pageGlobalChord(Keys modifier, String key, String methodName) {
         new Actions(driver).keyDown(modifier).sendKeys(key).keyUp(modifier).perform();
@@ -231,6 +316,11 @@ public class KeyboardActions {
      * a new tab. Expects the locator for the element to click, the
      * modifier key to hold, a readable name for logging, and the name of
      * the calling method.
+     *
+     * @param locator     the locator for the element to click
+     * @param modifier    the modifier key to hold down while clicking
+     * @param elementName a readable name for the element, for logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void holdKeyWhileClicking(By locator, Keys modifier, String elementName, String methodName) {
         WebElement element = waitForVisible(locator, elementName, methodName);

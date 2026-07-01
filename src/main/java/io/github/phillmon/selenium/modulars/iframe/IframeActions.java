@@ -27,6 +27,8 @@ public class IframeActions {
     /**
      * Creates the iframe actions using a default timeout of 10 seconds.
      * Expects the WebDriver for the current browser session.
+     *
+     * @param driver the WebDriver for the current browser session
      */
     public IframeActions(WebDriver driver) {
         this(driver, Duration.ofSeconds(10));
@@ -36,6 +38,9 @@ public class IframeActions {
      * Creates the iframe actions with a custom timeout. Expects the
      * WebDriver for the current browser session and how long to wait for
      * a frame to become available.
+     *
+     * @param driver  the WebDriver for the current browser session
+     * @param timeout how long to wait for a frame to become available
      */
     public IframeActions(WebDriver driver, Duration timeout) {
         this.driver = driver;
@@ -47,6 +52,10 @@ public class IframeActions {
      * the frame element, a readable name for logging, and the name of the
      * calling method. Throws an IframeActionException if the frame does
      * not become available within the configured timeout.
+     *
+     * @param locator     the locator for the frame element
+     * @param elementName a readable name for the frame element, used in logging
+     * @param methodName  the name of the calling method, for logging
      */
     public void switchToFrame(By locator, String elementName, String methodName) {
         try {
@@ -65,6 +74,9 @@ public class IframeActions {
      * Expects the frame's name or id and the name of the calling method
      * for logging. Throws an IframeActionException if the frame does not
      * become available within the configured timeout.
+     *
+     * @param nameOrId   the frame's name or id attribute
+     * @param methodName the name of the calling method, for logging
      */
     public void switchToFrame(String nameOrId, String methodName) {
         try {
@@ -84,6 +96,9 @@ public class IframeActions {
      * name of the calling method for logging. Throws an
      * IframeActionException if the frame does not become available
      * within the configured timeout.
+     *
+     * @param index      the zero-based index of the frame among the frames on the page
+     * @param methodName the name of the calling method, for logging
      */
     public void switchToFrame(int index, String methodName) {
         try {
@@ -104,6 +119,10 @@ public class IframeActions {
      * locators for each frame from outermost to innermost. Throws an
      * IframeActionException if no locators are given, or if the number of
      * names does not match the number of locators.
+     *
+     * @param methodName   the name of the calling method, for logging
+     * @param elementNames readable names matching each locator, in the same order
+     * @param locators     the locators for each frame, from outermost to innermost
      */
     public void switchToNestedFrame(String methodName, List<String> elementNames, By... locators) {
         if (locators == null || locators.length == 0) {
@@ -123,6 +142,8 @@ public class IframeActions {
      * current frame. Expects the name of the calling method for logging.
      * Throws an IframeActionException if the browser is already at the
      * top-level document with no parent frame to go back to.
+     *
+     * @param methodName the name of the calling method, for logging
      */
     public void switchToParentFrame(String methodName) {
         if (frameStack.isEmpty()) {
@@ -138,6 +159,8 @@ public class IframeActions {
      * Switches the browser's focus all the way back out to the main page
      * content, leaving every frame. Expects the name of the calling
      * method for logging.
+     *
+     * @param methodName the name of the calling method, for logging
      */
     public void switchToDefaultContent(String methodName) {
         driver.switchTo().defaultContent();
@@ -151,6 +174,13 @@ public class IframeActions {
      * throws. Expects the locator for the frame, a readable name for
      * logging, the action to run while inside the frame, and the name of
      * the calling method. Returns whatever the action returns.
+     *
+     * @param <T>         the type of value returned by the action
+     * @param locator     the locator for the frame to run the action in
+     * @param elementName a readable name for the frame element, used in logging
+     * @param action      the action to run while inside the frame
+     * @param methodName  the name of the calling method, for logging
+     * @return whatever the action returns
      */
     public <T> T doInFrame(By locator, String elementName, java.util.function.Supplier<T> action, String methodName) {
         switchToFrame(locator, elementName, methodName);
@@ -168,6 +198,11 @@ public class IframeActions {
      * logging, the action to run while inside the frame, and the name of
      * the calling method. Use this version when the action does not need
      * to return a value.
+     *
+     * @param locator     the locator for the frame to run the action in
+     * @param elementName a readable name for the frame element, used in logging
+     * @param action      the action to run while inside the frame
+     * @param methodName  the name of the calling method, for logging
      */
     public void doInFrame(By locator, String elementName, Runnable action, String methodName) {
         switchToFrame(locator, elementName, methodName);
@@ -180,6 +215,8 @@ public class IframeActions {
 
     /**
      * Returns whether the browser is currently focused inside any frame.
+     *
+     * @return true if the browser is focused inside at least one frame, false if it is at the top-level page
      */
     public boolean isInsideFrame() {
         return !frameStack.isEmpty();
@@ -188,6 +225,8 @@ public class IframeActions {
     /**
      * Returns how many frames deep the browser is currently focused,
      * where zero means the top-level page.
+     *
+     * @return the number of frames deep the browser is currently focused, or zero if at the top-level page
      */
     public int getCurrentFrameDepth() {
         return frameStack.size();
@@ -198,6 +237,11 @@ public class IframeActions {
      * page right now, without waiting for it. Expects the locator for the
      * frame, a readable name for logging, and the name of the calling
      * method.
+     *
+     * @param locator     the locator for the frame element
+     * @param elementName a readable name for the frame element, used in logging
+     * @param methodName  the name of the calling method, for logging
+     * @return true if a matching frame is present on the page right now, false otherwise
      */
     public boolean isFramePresent(By locator, String elementName, String methodName) {
         boolean present = !driver.findElements(locator).isEmpty();
@@ -208,6 +252,9 @@ public class IframeActions {
     /**
      * Returns the total number of iframe and frame elements currently on
      * the page. Expects the name of the calling method for logging.
+     *
+     * @param methodName the name of the calling method, for logging
+     * @return the total number of iframe and frame elements currently on the page
      */
     public int countFrames(String methodName) {
         int count = driver.findElements(By.tagName("iframe")).size()

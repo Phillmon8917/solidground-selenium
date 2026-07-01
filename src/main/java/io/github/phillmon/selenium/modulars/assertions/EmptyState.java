@@ -6,6 +6,8 @@ package io.github.phillmon.selenium.modulars.assertions;
  * an assertion should check for.
  */
 public enum EmptyState {
+    /** Indicates the string is expected to be empty. */
     EMPTY,
+    /** Indicates the string is expected to be non-empty. */
     NOT_EMPTY
 }

@@ -17,6 +17,9 @@ public final class FaultReporter {
      * Reports a failure with no extra context. Expects the error that was
      * caught and the name of the place where it happened (the source).
      * This is the same as calling captureFault(error, source, null).
+     *
+     * @param error  the exception that was caught
+     * @param source the page object, class, or method the failure came from
      */
     public static void captureFault(Throwable error, String source) {
         captureFault(error, source, null);
@@ -30,6 +33,10 @@ public final class FaultReporter {
      * before, nothing happens. Otherwise this builds a fault record and
      * writes it to the log through LoggerUtil. If writing the log itself
      * fails for any reason, a simpler fallback message is logged instead.
+     *
+     * @param error   the exception that was caught
+     * @param source  the page object, class, or method the failure came from
+     * @param context extra caller-supplied detail about what was happening, may be null
      */
     public static void captureFault(Throwable error, String source, String context) {
         if (error == null || !FaultCache.shouldReport(error)) {
@@ -49,6 +56,9 @@ public final class FaultReporter {
      * throws it. Expects the source it came from and the message to use.
      * Use this when the code needs to stop immediately with a clear error,
      * for example when a required value is missing.
+     *
+     * @param source  the page object, class, or method the failure came from
+     * @param message the message to use for the thrown exception
      */
     public static void logAndThrow(String source, String message) {
         StepExecutionException error = new StepExecutionException(message);
@@ -61,6 +71,9 @@ public final class FaultReporter {
      * anything. Expects the source it came from and the message to log.
      * Use this when something has gone wrong but the test should still be
      * allowed to continue running.
+     *
+     * @param source  the page object, class, or method the failure came from
+     * @param message the message to log
      */
     public static void log(String source, String message) {
         captureFault(new StepExecutionException(message), source);

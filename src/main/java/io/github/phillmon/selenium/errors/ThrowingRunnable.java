@@ -11,6 +11,8 @@ public interface ThrowingRunnable {
     /**
      * Runs the step. Any exception thrown here is caught and handled by
      * whichever SafeStep method is running this step.
+     *
+     * @throws Exception if the step fails
      */
     void run() throws Exception;
 }

@@ -10,6 +10,8 @@ public class InvalidNetworkExpectationException extends IllegalArgumentException
     /**
      * Creates the exception with a message describing what part of the
      * configuration was invalid.
+     *
+     * @param message description of what part of the configuration was invalid
      */
     public InvalidNetworkExpectationException(String message) {
         super(message);

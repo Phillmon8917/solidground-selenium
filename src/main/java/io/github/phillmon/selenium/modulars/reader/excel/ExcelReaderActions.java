@@ -22,6 +22,8 @@ public class ExcelReaderActions extends AbstractDocumentReaderActions {
     /**
      * Creates the Excel reader using the given downloader, and configures
      * it to save downloaded documents with the .xlsx extension.
+     *
+     * @param downloader the downloader this reader will use to fetch documents
      */
     public ExcelReaderActions(DocumentDownloader downloader) {
         super(downloader, "xlsx");
@@ -33,6 +35,10 @@ public class ExcelReaderActions extends AbstractDocumentReaderActions {
      * spaces and rows separated by new lines. Expects the path to the
      * workbook file. Returns the combined text with leading and trailing
      * whitespace removed.
+     *
+     * @param filePath the path to the workbook file
+     * @return the combined text of every sheet, row, and cell, trimmed of leading and trailing whitespace
+     * @throws IOException if the workbook file cannot be opened or read
      */
     @Override
     protected String extractText(Path filePath) throws IOException {
