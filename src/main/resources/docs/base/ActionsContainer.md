@@ -13,6 +13,7 @@ directly.
 - [BasePage](BasePage.md) — creates and owns the `ActionsContainer`.
 - [PageModularOptions](PageModularOptions.md) — controls how the action groups inside are configured.
 - [ReaderActionsContainer](ReaderActionsContainer.md) — the `reader` field, grouping the document readers.
+- [NetworkValidationActions](../modulars/network/NetworkValidationActions.md) - closed by `ActionsContainer.close()` if a DevTools session was opened.
 
 ## Fields (one action group per module)
 
@@ -51,6 +52,7 @@ isn't a page object), pass the driver and, optionally, custom options:
 ```java
 ActionsContainer actions = new ActionsContainer(driver, PageModularOptions.builder()
         .withSoftAssert(sharedSoftAssert)
+        .withElementTimeout(Duration.ofSeconds(20))
         .build());
 ```
 
@@ -60,5 +62,11 @@ ActionsContainer actions = new ActionsContainer(driver, PageModularOptions.build
 |---|---|
 | `ActionsContainer(WebDriver driver)` | Builds every action group using default options. Throws `IllegalArgumentException` if `driver` is null. |
 | `ActionsContainer(WebDriver driver, PageModularOptions options)` | Builds every action group using the given options. Throws `IllegalArgumentException` if `driver` or `options` is null. |
+
+## Methods
+
+| Method | Description |
+|---|---|
+| `close()` | Releases resources opened by action groups, currently the network DevTools session if it was created. |
 
 [Back to base index](README.md) · [Docs home](../README.md)

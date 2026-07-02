@@ -6,7 +6,8 @@ Resolves configuration values needed to run the tests, such as the admin
 username, password, and base url. Looks in the project's `.env` file
 first, then the operating system's environment variables, then Java
 system properties, so the same code works whether a value is set locally
-in a `.env` file or injected by a CI pipeline.
+in a `.env` file or injected by a CI pipeline. A missing `.env` file is fine;
+the loader continues on to environment variables and system properties.
 
 ## Related classes
 

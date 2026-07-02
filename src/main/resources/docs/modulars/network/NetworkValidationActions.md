@@ -6,7 +6,9 @@ The page-object facing entry point for verifying real network traffic
 during a test, such as confirming that clicking a button actually sent
 the expected request and got back the expected response. Wraps
 [NetworkResponseValidator](NetworkResponseValidator.md), which does the
-actual work of listening to Chrome DevTools.
+actual work of listening to Chrome DevTools. The DevTools session is opened
+only on first use, so a page object can hold `networkActions` even when the
+current test never validates network traffic.
 
 ## Related classes
 
@@ -37,7 +39,7 @@ modulars.networkActions.coordinateSubmitAndFetchWithReloadRecovery(new SubmitAnd
 ```
 
 Closing the DevTools session once network validation is no longer
-needed, typically in a test teardown:
+needed, typically in a test teardown or through `BasePage.close()`:
 
 ```java
 modulars.networkActions.close();
@@ -47,7 +49,7 @@ modulars.networkActions.close();
 
 | Constructor | Description |
 |---|---|
-| `NetworkValidationActions(WebDriver)` | Starts recording network traffic. Expects a ChromeDriver. |
+| `NetworkValidationActions(WebDriver)` | Stores the driver. The Chrome DevTools session is opened lazily on first validation. |
 
 ## Methods
 
@@ -55,6 +57,6 @@ modulars.networkActions.close();
 |---|---|
 | `coordinateActionsAndResponses(CoordinationOptions)` | Runs actions and confirms every expected response arrived. |
 | `coordinateSubmitAndFetchWithReloadRecovery(SubmitAndFetchOptions)` | Runs actions, confirms the submit response, then waits for the fetch response — refreshing and retrying once if it doesn't show up. |
-| `close()` | Closes the underlying DevTools session. |
+| `close()` | Closes the underlying DevTools session if one was opened. Safe to call even if no network validation ran. |
 
 [Back to network index](README.md) · [Docs home](../../README.md)

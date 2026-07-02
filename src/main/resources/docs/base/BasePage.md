@@ -6,7 +6,9 @@ The abstract class every page object in the project extends. It holds the
 `WebDriver` for the page and builds one [ActionsContainer](ActionsContainer.md),
 so a page object gets access to every action group (clicking, typing,
 waiting, reading documents, and so on) without creating any of them
-itself.
+itself. It implements `AutoCloseable`; calling `close()` releases resources
+owned by action groups, such as a network validation DevTools session. It does
+not quit the WebDriver.
 
 ## Related classes
 
@@ -48,12 +50,27 @@ public class ReportsPage extends BasePage {
 }
 ```
 
+For a short-lived page object, `try-with-resources` can release action resources
+automatically:
+
+```java
+try (ReportsPage reportsPage = new ReportsPage(driver, Path.of("build/downloads"))) {
+    reportsPage.downloadMonthlyReport();
+}
+```
+
 ## Constructors
 
 | Constructor | Description |
 |---|---|
 | `BasePage(WebDriver driver)` | Builds the page using default options for every action group. Throws `IllegalArgumentException` if `driver` is null. |
 | `BasePage(WebDriver driver, PageModularOptions options)` | Builds the page with custom options. Throws `IllegalArgumentException` if `driver` is null. |
+
+## Methods
+
+| Method | Description |
+|---|---|
+| `close()` | Releases resources opened by action groups. Does not quit the WebDriver. |
 
 ## Fields available to subclasses
 

@@ -17,11 +17,19 @@ import java.time.Duration;
  * defaults() to get a plain configuration with no customisation.
  */
 public class PageModularOptions {
+    private static final ThreadLocal<SoftAssert> THREAD_SOFT_ASSERT = ThreadLocal.withInitial(SoftAssert::new);
+
     private final CalendarLocators calendarLocators;
     private final ToggleStateResolver toggleStateResolver;
     private final SoftAssert softAssert;
     private final Path downloadDirectory;
     private final Duration downloadTimeout;
+    private final Duration elementTimeout;
+    private final Duration iframeTimeout;
+    private final Duration mouseTimeout;
+    private final Duration keyboardTimeout;
+    private final Duration dropdownTimeout;
+    private final Duration waitTimeout;
 
     private PageModularOptions(Builder builder) {
         this.calendarLocators = builder.calendarLocators;
@@ -29,6 +37,39 @@ public class PageModularOptions {
         this.softAssert = builder.softAssert;
         this.downloadDirectory = builder.downloadDirectory;
         this.downloadTimeout = builder.downloadTimeout;
+        this.elementTimeout = builder.elementTimeout;
+        this.iframeTimeout = builder.iframeTimeout;
+        this.mouseTimeout = builder.mouseTimeout;
+        this.keyboardTimeout = builder.keyboardTimeout;
+        this.dropdownTimeout = builder.dropdownTimeout;
+        this.waitTimeout = builder.waitTimeout;
+    }
+
+    /**
+     * Returns the SoftAssert instance shared by every page object on the
+     * current thread that was not given an explicit SoftAssert through
+     * the builder. Exposed so a test itself (which typically does not
+     * hold a page object directly) can call assertAll() on the same
+     * SoftAssert instance its page objects have been recording into.
+     *
+     * @return the SoftAssert instance shared by default on the current thread
+     */
+    public static SoftAssert currentThreadSoftAssert() {
+        return THREAD_SOFT_ASSERT.get();
+    }
+
+    /**
+     * Replaces the SoftAssert instance shared by default on the current
+     * thread with a brand new one. Test runners commonly reuse the same
+     * pool of threads across many test methods, so without calling this
+     * at the start of each test (for example from a TestNG
+     * {@code @BeforeMethod}), soft assertion failures recorded by one
+     * test could still be sitting unflushed when the next test on that
+     * same thread starts. Has no effect on any PageModularOptions built
+     * with an explicit SoftAssert supplied through the builder.
+     */
+    public static void resetCurrentThreadSoftAssert() {
+        THREAD_SOFT_ASSERT.set(new SoftAssert());
     }
 
     /**
@@ -68,12 +109,63 @@ public class PageModularOptions {
     }
 
     /**
+     * Returns the timeout the element actions should use, or null to use
+     * that module's own default.
+     */
+    Duration getElementTimeout() {
+        return elementTimeout;
+    }
+
+    /**
+     * Returns the timeout the iframe actions should use, or null to use
+     * that module's own default.
+     */
+    Duration getIframeTimeout() {
+        return iframeTimeout;
+    }
+
+    /**
+     * Returns the timeout the mouse actions should use, or null to use
+     * that module's own default.
+     */
+    Duration getMouseTimeout() {
+        return mouseTimeout;
+    }
+
+    /**
+     * Returns the timeout the keyboard actions should use, or null to use
+     * that module's own default.
+     */
+    Duration getKeyboardTimeout() {
+        return keyboardTimeout;
+    }
+
+    /**
+     * Returns the timeout the dropdown actions should use, or null to use
+     * that module's own default.
+     */
+    Duration getDropdownTimeout() {
+        return dropdownTimeout;
+    }
+
+    /**
+     * Returns the timeout the smart wait actions should use, or null to
+     * use that module's own default.
+     */
+    Duration getWaitTimeout() {
+        return waitTimeout;
+    }
+
+    /**
      * Returns the SoftAssert instance to use for assertions. If none was
-     * supplied through the builder, this creates a new one so every page
-     * object still gets a working SoftAssert.
+     * supplied through the builder, this returns the SoftAssert shared by
+     * default on the current thread (see currentThreadSoftAssert()), so
+     * every page object built with default options on the same thread
+     * records into the same SoftAssert instance, and a single assertAll()
+     * call sees soft failures recorded through any of them.
      */
     SoftAssert createSoftAssert() {
-        return softAssert != null ? softAssert : new SoftAssert();
+        return softAssert != null ? softAssert : currentThreadSoftAssert();
     }
 
     /**
@@ -110,6 +202,12 @@ public class PageModularOptions {
         private SoftAssert softAssert;
         private Path downloadDirectory;
         private Duration downloadTimeout;
+        private Duration elementTimeout;
+        private Duration iframeTimeout;
+        private Duration mouseTimeout;
+        private Duration keyboardTimeout;
+        private Duration dropdownTimeout;
+        private Duration waitTimeout;
 
         /**
          * Creates a builder pre-populated with the default calendar
@@ -198,6 +296,103 @@ public class PageModularOptions {
                 throw new IllegalArgumentException("downloadTimeout must not be null");
             }
             this.downloadTimeout = downloadTimeout;
+            return this;
+        }
+
+        /**
+         * Sets how long the element actions should wait for an element to
+         * reach the expected state, instead of that module's own default.
+         * Expects a non-null Duration and throws an
+         * IllegalArgumentException if null is passed in.
+         *
+         * @param elementTimeout how long the element actions should wait
+         * @return this builder, so calls can be chained
+         */
+        public Builder withElementTimeout(Duration elementTimeout) {
+            if (elementTimeout == null) {
+                throw new IllegalArgumentException("elementTimeout must not be null");
+            }
+            this.elementTimeout = elementTimeout;
+            return this;
+        }
+
+        /**
+         * Sets how long the iframe actions should wait, instead of that
+         * module's own default. Expects a non-null Duration and throws an
+         * IllegalArgumentException if null is passed in.
+         *
+         * @param iframeTimeout how long the iframe actions should wait
+         * @return this builder, so calls can be chained
+         */
+        public Builder withIframeTimeout(Duration iframeTimeout) {
+            if (iframeTimeout == null) {
+                throw new IllegalArgumentException("iframeTimeout must not be null");
+            }
+            this.iframeTimeout = iframeTimeout;
+            return this;
+        }
+
+        /**
+         * Sets how long the mouse actions should wait, instead of that
+         * module's own default. Expects a non-null Duration and throws an
+         * IllegalArgumentException if null is passed in.
+         *
+         * @param mouseTimeout how long the mouse actions should wait
+         * @return this builder, so calls can be chained
+         */
+        public Builder withMouseTimeout(Duration mouseTimeout) {
+            if (mouseTimeout == null) {
+                throw new IllegalArgumentException("mouseTimeout must not be null");
+            }
+            this.mouseTimeout = mouseTimeout;
+            return this;
+        }
+
+        /**
+         * Sets how long the keyboard actions should wait, instead of that
+         * module's own default. Expects a non-null Duration and throws an
+         * IllegalArgumentException if null is passed in.
+         *
+         * @param keyboardTimeout how long the keyboard actions should wait
+         * @return this builder, so calls can be chained
+         */
+        public Builder withKeyboardTimeout(Duration keyboardTimeout) {
+            if (keyboardTimeout == null) {
+                throw new IllegalArgumentException("keyboardTimeout must not be null");
+            }
+            this.keyboardTimeout = keyboardTimeout;
+            return this;
+        }
+
+        /**
+         * Sets how long the dropdown actions should wait, instead of that
+         * module's own default. Expects a non-null Duration and throws an
+         * IllegalArgumentException if null is passed in.
+         *
+         * @param dropdownTimeout how long the dropdown actions should wait
+         * @return this builder, so calls can be chained
+         */
+        public Builder withDropdownTimeout(Duration dropdownTimeout) {
+            if (dropdownTimeout == null) {
+                throw new IllegalArgumentException("dropdownTimeout must not be null");
+            }
+            this.dropdownTimeout = dropdownTimeout;
+            return this;
+        }
+
+        /**
+         * Sets how long the smart wait actions should wait, instead of
+         * that module's own default. Expects a non-null Duration and
+         * throws an IllegalArgumentException if null is passed in.
+         *
+         * @param waitTimeout how long the smart wait actions should wait
+         * @return this builder, so calls can be chained
+         */
+        public Builder withWaitTimeout(Duration waitTimeout) {
+            if (waitTimeout == null) {
+                throw new IllegalArgumentException("waitTimeout must not be null");
+            }
+            this.waitTimeout = waitTimeout;
             return this;
         }
 

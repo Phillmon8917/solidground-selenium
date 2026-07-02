@@ -1,7 +1,8 @@
 package io.github.phillmon.selenium.errors;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Keeps track of which exception instances have already been reported, so
@@ -10,7 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * memory for as long as the test process runs.
  */
 final class FaultCache {
-    private static final Set<Integer> reported = ConcurrentHashMap.newKeySet();
+    private static final Set<Throwable> reported =
+            Collections.synchronizedSet(Collections.newSetFromMap(new IdentityHashMap<>()));
 
     private FaultCache() {
     }
@@ -21,10 +23,14 @@ final class FaultCache {
      * returns false. When the error has not been seen before, this
      * remembers it and returns true. When the same error instance has
      * already been seen, this returns false so it does not get reported
-     * again.
+     * again. Tracks by true reference identity (via IdentityHashMap)
+     * rather than System.identityHashCode alone, since identity hash
+     * codes are not guaranteed unique and two unrelated exceptions
+     * thrown on different threads during a parallel run could otherwise
+     * collide, silently swallowing a genuine failure.
      */
     static boolean shouldReport(Throwable error) {
-        return error != null && reported.add(System.identityHashCode(error));
+        return error != null && reported.add(error);
     }
 
     /**

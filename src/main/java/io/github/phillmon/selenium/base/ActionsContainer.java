@@ -83,15 +83,38 @@ public class ActionsContainer {
         this.assertionActions = new AssertionActions(options.createSoftAssert());
         this.browserActions = new BrowserActions(driver);
         this.calendarActions = new CalendarActions(driver, options.getCalendarLocators());
-        this.dropdownActions = new SelectDropdownActions(driver);
-        this.elementActions = new ElementActions(driver);
-        this.iframeActions = new IframeActions(driver);
-        this.keyboardActions = new KeyboardActions(driver);
+        this.dropdownActions = options.getDropdownTimeout() != null
+                ? new SelectDropdownActions(driver, options.getDropdownTimeout())
+                : new SelectDropdownActions(driver);
+        this.elementActions = options.getElementTimeout() != null
+                ? new ElementActions(driver, options.getElementTimeout())
+                : new ElementActions(driver);
+        this.iframeActions = options.getIframeTimeout() != null
+                ? new IframeActions(driver, options.getIframeTimeout())
+                : new IframeActions(driver);
+        this.keyboardActions = options.getKeyboardTimeout() != null
+                ? new KeyboardActions(driver, options.getKeyboardTimeout())
+                : new KeyboardActions(driver);
         this.loadingIndicatorActions = new LoadingIndicatorActions(driver);
-        this.mouseActions = new MouseActions(driver);
+        this.mouseActions = options.getMouseTimeout() != null
+                ? new MouseActions(driver, options.getMouseTimeout())
+                : new MouseActions(driver);
         this.networkActions = new NetworkValidationActions(driver);
         this.reader = new ReaderActionsContainer(downloader);
-        this.waitActions = new SmartWaitActions(driver);
+        this.waitActions = options.getWaitTimeout() != null
+                ? new SmartWaitActions(driver, options.getWaitTimeout())
+                : new SmartWaitActions(driver);
         this.toggleActions = new ToggleActions(driver, options.getToggleStateResolver());
+    }
+
+    /**
+     * Releases any resources opened by the action groups in this
+     * container, such as the network actions' DevTools session (if one
+     * was ever opened). Call this once a page object built on this
+     * container is no longer needed, so long-lived resources are not held
+     * onto for the rest of the browser session.
+     */
+    public void close() {
+        networkActions.close();
     }
 }

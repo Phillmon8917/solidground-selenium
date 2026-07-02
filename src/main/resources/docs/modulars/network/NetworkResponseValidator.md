@@ -6,7 +6,8 @@ Listens to the browser's real network traffic through Chrome DevTools and
 checks that expected requests actually happened with the expected status
 codes and, optionally, response bodies. This is the engine behind
 [NetworkValidationActions](NetworkValidationActions.md) — not part of the
-public API, so page objects never construct this directly.
+public API, so page objects never construct this directly. It is created lazily
+by `NetworkValidationActions` the first time network validation is used.
 
 ## Related classes
 

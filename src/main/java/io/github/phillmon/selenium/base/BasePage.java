@@ -7,8 +7,12 @@ import org.openqa.selenium.WebDriver;
  * It holds the WebDriver instance for the page and gives the page object
  * access to every action group (buttons, dropdowns, waits, and so on) through
  * the modulars field, so a page object does not need to create these itself.
+ * Implements AutoCloseable so a page object can be used in a
+ * try-with-resources block, or have close() called explicitly, to release
+ * resources such as a network validation DevTools session once the page
+ * is no longer needed.
  */
-public abstract class BasePage {
+public abstract class BasePage implements AutoCloseable {
     /** The WebDriver instance controlling the browser session for this page. */
     protected final WebDriver driver;
     /** The container giving access to every action group available to this page. */
@@ -43,5 +47,16 @@ public abstract class BasePage {
 
         this.driver = driver;
         this.modulars = new ActionsContainer(driver, options);
+    }
+
+    /**
+     * Releases any resources this page object's action groups opened,
+     * such as a network validation DevTools session. Safe to call even if
+     * no such resource was ever opened. Does not quit the WebDriver
+     * itself, since the same driver may still be in use elsewhere.
+     */
+    @Override
+    public void close() {
+        modulars.close();
     }
 }

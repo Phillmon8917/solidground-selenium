@@ -11,17 +11,40 @@ import org.openqa.selenium.WebDriver;
  * Chrome DevTools.
  */
 public class NetworkValidationActions {
-    private final NetworkResponseValidator validator;
+    private final WebDriver driver;
+    private volatile NetworkResponseValidator validator;
 
     /**
-     * Creates the network validation actions and starts recording network
-     * traffic for the given driver. Expects a WebDriver backed by Chrome,
-     * since network recording relies on Chrome's DevTools protocol.
+     * Creates the network validation actions for the given driver. The
+     * DevTools session itself is not opened here: it is deferred until the
+     * first call that actually needs to validate network traffic, so a
+     * page object that never uses network validation never pays for a CDP
+     * session and does not require a Chrome-backed driver.
      *
      * @param driver the Chrome-backed WebDriver to record network traffic for
      */
     public NetworkValidationActions(WebDriver driver) {
-        this.validator = new NetworkResponseValidator(driver);
+        this.driver = driver;
+    }
+
+    /**
+     * Returns the DevTools-backed validator, opening its CDP session on
+     * first use. Expects a Chrome-backed WebDriver, since network
+     * recording relies on Chrome's DevTools protocol.
+     */
+    private NetworkResponseValidator validator() {
+        NetworkResponseValidator result = validator;
+        if (result == null) {
+            synchronized (this) {
+                result = validator;
+                if (result == null) {
+                    LoggerUtil.info("Opening DevTools session for network validation");
+                    result = new NetworkResponseValidator(driver);
+                    validator = result;
+                }
+            }
+        }
+        return result;
     }
 
     /**
@@ -33,7 +56,7 @@ public class NetworkValidationActions {
      * @param options the actions to run and the responses to wait for
      */
     public void coordinateActionsAndResponses(CoordinationOptions options) {
-        validator.validateActionsAndResponses(options.getActions(), options.getWaitForResponses(), options.getTimeout());
+        validator().validateActionsAndResponses(options.getActions(), options.getWaitForResponses(), options.getTimeout());
     }
 
     /**
@@ -47,7 +70,7 @@ public class NetworkValidationActions {
      * @param options the actions, expected responses, and timing to coordinate
      */
     public void coordinateSubmitAndFetchWithReloadRecovery(SubmitAndFetchOptions options) {
-        validator.validateSubmitAndFetch(
+        validator().validateSubmitAndFetch(
                 options.getActions(),
                 options.getSubmitResponse(),
                 options.getFetchResponse(),
@@ -58,11 +81,15 @@ public class NetworkValidationActions {
     }
 
     /**
-     * Closes the underlying DevTools session. Call this once network
-     * validation is no longer needed for the current browser session.
+     * Closes the underlying DevTools session, if one was ever opened. Call
+     * this once network validation is no longer needed for the current
+     * browser session. Safe to call even if no network validation method
+     * was ever used, since no session would have been opened.
      */
     public void close() {
-        LoggerUtil.info("Closing NetworkValidationActions");
-        validator.close();
+        if (validator != null) {
+            LoggerUtil.info("Closing NetworkValidationActions");
+            validator.close();
+        }
     }
 }

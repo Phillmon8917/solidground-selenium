@@ -2,7 +2,7 @@
 
 Verifying real network requests and responses via Chrome DevTools,
 available on a page object as `modulars.networkActions`. Only works with
-ChromeDriver.
+ChromeDriver when a network validation method is actually called.
 
 - [NetworkValidationActions](NetworkValidationActions.md) — the page-object facing entry point.
 - [NetworkResponseValidator](NetworkResponseValidator.md) — the DevTools engine behind it (package-private).

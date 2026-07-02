@@ -11,7 +11,7 @@ import io.github.cdimascio.dotenv.Dotenv;
  * by a CI pipeline.
  */
 public class EnvLoader {
-    private static Dotenv dotenv = Dotenv.load();
+    private static Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private EnvLoader(){
     }
 

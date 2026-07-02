@@ -7,6 +7,11 @@ and downloads it to a local file, reusing the browser's own cookies so
 documents behind a login still download correctly. Every document reader
 (Excel, PDF, text, Word) shares one of these.
 
+Cookies are forwarded only when the document URL is on the same host as the
+browser's current page. This avoids leaking a session cookie to a different
+origin. On platforms with POSIX file permissions, downloaded files are also
+restricted to owner read/write permissions after they are saved.
+
 ## Related classes
 
 - [DocumentSource](DocumentSource.md) — describes what to resolve into a file.
@@ -26,6 +31,14 @@ Direct use looks like:
 DocumentDownloader downloader = new DocumentDownloader(driver, Path.of("build/downloads"), Duration.ofSeconds(45));
 Path file = downloader.resolve(DocumentSource.fromUrl("https://example.com/report.pdf"), "pdf", "downloadReport");
 downloader.delete(file, "cleanupReport");
+```
+
+For authenticated downloads, navigate the browser to the same application host
+before resolving the document:
+
+```java
+driver.get("https://app.example.com/reports");
+Path file = downloader.resolve(DocumentSource.fromUrl("https://app.example.com/reports/monthly.pdf"), "pdf", "downloadReport");
 ```
 
 ## Constructors

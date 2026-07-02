@@ -35,6 +35,7 @@ public class LoginPage extends BasePage {
 
 | Package | What it's for |
 |---|---|
+| [auth](auth/README.md) | Reusing logged-in browser state across tests and WebDriver sessions. |
 | [base](base/README.md) | The base classes every page object builds on: `BasePage`, `ActionsContainer`, `PageModularOptions`, `ReaderActionsContainer`. |
 | [errors](errors/README.md) | `SafeStep` and `FaultReporter` — the replacement for hand-written try/catch around page-object steps. |
 | [modulars/assertions](modulars/assertions/README.md) | TestNG assertions with logging built in. |
@@ -53,6 +54,7 @@ public class LoginPage extends BasePage {
 | [utils/env](utils/env/README.md) | Reading configuration from `.env`, environment variables, or system properties. |
 | [utils/logging](utils/logging/README.md) | The shared logger and its pluggable reporters (Allure, TestNG, no-op). |
 | [utils/timeout](utils/timeout/README.md) | Adjusting timeouts so CI runs get extra buffer. |
+| [video](video/README.md) | Recording Chrome-backed browser sessions and retaining videos by test outcome. |
 
 ## Where to start
 
@@ -63,3 +65,7 @@ public class LoginPage extends BasePage {
   [SafeStep](errors/SafeStep.md).
 - Looking for how to click, type, or read something on the page? Start
   with [ElementActions](modulars/element/ElementActions.md).
+- Want to skip repeated login setup? Start with
+  [SharedAuthState](auth/SharedAuthState.md).
+- Need a browser recording for failures? Start with
+  [VideoRecorder](video/VideoRecorder.md).

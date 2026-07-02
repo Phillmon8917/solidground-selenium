@@ -10,8 +10,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,9 +26,17 @@ import java.util.stream.Collectors;
  * it to a local file, reusing the browser's own cookies so documents
  * behind a login still download correctly. Every document reader (Excel,
  * PDF, text, Word) shares one of these to fetch files before reading
- * them.
+ * them. Session cookies are only forwarded when the download url shares
+ * the browser's current host, so a document url on a different origin
+ * never gets sent the browser session's cookies. Downloaded files are
+ * locked down to owner-only permissions on platforms that support it, so
+ * documents that may contain sensitive data are not left readable by
+ * other users on a shared machine.
  */
 public class DocumentDownloader {
+    private static final boolean SUPPORTS_POSIX_PERMISSIONS =
+            FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
+
     private final WebDriver driver;
     private final Path defaultDirectory;
     private final Duration requestTimeout;
@@ -174,7 +184,7 @@ public class DocumentDownloader {
                     .timeout(requestTimeout)
                     .GET();
 
-            String cookieHeader = buildCookieHeader();
+            String cookieHeader = buildCookieHeader(url, methodName);
             if (!cookieHeader.isEmpty()) {
                 requestBuilder.header("Cookie", cookieHeader);
             }
@@ -187,6 +197,7 @@ public class DocumentDownloader {
             }
 
             Files.write(targetPath, response.body());
+            restrictToOwnerOnly(targetPath, methodName);
             LoggerUtil.info(methodName + " downloaded document to: " + targetPath);
         } catch (IOException | InterruptedException e) {
             if (e instanceof InterruptedException) {
@@ -199,13 +210,63 @@ public class DocumentDownloader {
     /**
      * Builds a Cookie header value out of every cookie currently held by
      * the browser session, so a downloaded document can be requested with
-     * the same session the browser is using.
+     * the same session the browser is using. Only attaches cookies when
+     * the download url's host matches the browser's current host: the
+     * browser's cookies belong to whatever site it currently has loaded,
+     * so forwarding them to a url on a different host would leak that
+     * session to an unrelated origin. Expects the url about to be
+     * downloaded from and the name of the calling method, for logging.
      */
-    private String buildCookieHeader() {
+    private String buildCookieHeader(String url, String methodName) {
+        if (!isSameHostAsBrowser(url)) {
+            LoggerUtil.warning(methodName + " - download url's host differs from the browser's "
+                    + "current host; not forwarding session cookies to avoid leaking them to a "
+                    + "different origin: " + url);
+            return "";
+        }
+
         List<Cookie> cookies = new ArrayList<>(driver.manage().getCookies());
         return cookies.stream()
                 .map(cookie -> cookie.getName() + "=" + cookie.getValue())
                 .collect(Collectors.joining("; "));
+    }
+
+    /**
+     * Checks whether the given url's host matches the host of the page
+     * currently open in the browser. Returns false, rather than throwing,
+     * if either url cannot be parsed or has no host, so an unusual
+     * current url (such as about:blank) safely results in cookies not
+     * being forwarded instead of an exception.
+     */
+    private boolean isSameHostAsBrowser(String url) {
+        try {
+            String targetHost = URI.create(url).getHost();
+            String browserHost = URI.create(driver.getCurrentUrl()).getHost();
+            return targetHost != null && targetHost.equalsIgnoreCase(browserHost);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Restricts a downloaded file to be readable and writable only by its
+     * owner, on platforms that support POSIX file permissions, since a
+     * downloaded document may contain sensitive data and should not be
+     * left readable by other users on a shared machine. Does nothing on
+     * platforms without POSIX permissions (such as Windows), and only
+     * logs a warning rather than failing the download if the permissions
+     * cannot be changed.
+     */
+    private void restrictToOwnerOnly(Path file, String methodName) {
+        if (!SUPPORTS_POSIX_PERMISSIONS) {
+            return;
+        }
+        try {
+            Files.setPosixFilePermissions(file, PosixFilePermissions.fromString("rw-------"));
+        } catch (IOException e) {
+            LoggerUtil.warning(methodName + " - could not restrict permissions on downloaded file "
+                    + file + ": " + e.getMessage());
+        }
     }
 
     /**

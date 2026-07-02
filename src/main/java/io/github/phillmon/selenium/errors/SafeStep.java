@@ -155,20 +155,26 @@ public final class SafeStep {
     }
 
     /**
-     * Works out a label for the current step by looking at the call stack
-     * and finding the first method that does not belong to this class.
-     * Returns that method's simple class name and method name joined with
-     * a dot, for example "LoginPage.loginAsAdmin". Returns "unknown" if no
-     * such frame can be found. This lets callers skip passing a label by
-     * hand for the common case.
+     * Works out a label for the current step by walking the call stack and
+     * finding the first frame that does not belong to this class. Returns
+     * that method's simple class name and method name joined with a dot,
+     * for example "LoginPage.loginAsAdmin". Returns "unknown" if no such
+     * frame can be found. This lets callers skip passing a label by hand
+     * for the common case. Uses StackWalker rather than
+     * Thread.getStackTrace(), since the latter includes the native
+     * getStackTrace() frame itself at index 0, which would otherwise be
+     * mistaken for the caller.
      */
     private static String callerLabel() {
-        for (StackTraceElement frame : Thread.currentThread().getStackTrace()) {
-            if (!frame.getClassName().equals(SafeStep.class.getName())) {
-                String simpleName = frame.getClassName().substring(frame.getClassName().lastIndexOf('.') + 1);
-                return simpleName + "." + frame.getMethodName();
-            }
-        }
-        return "unknown";
+        return StackWalker.getInstance().walk(frames -> frames
+                .map(StackWalker.StackFrame::toStackTraceElement)
+                .filter(frame -> !frame.getClassName().equals(SafeStep.class.getName()))
+                .findFirst()
+                .map(frame -> {
+                    String className = frame.getClassName();
+                    String simpleName = className.substring(className.lastIndexOf('.') + 1);
+                    return simpleName + "." + frame.getMethodName();
+                })
+                .orElse("unknown"));
     }
 }

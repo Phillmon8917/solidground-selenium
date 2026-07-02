@@ -4,10 +4,14 @@ Package: `io.github.phillmon.selenium.utils.logging`
 
 The single place every action class in the framework sends its log
 messages through. Every message is written to the slf4j logger, to a
-fresh execution log file for the current run, and to whichever
-[TestReporter](TestReporter.md) instances are registered
+fresh execution log file for the current thread, and to whichever
+[TestReporter](TestReporter.md) instances are registered on that thread
 ([AllureReporter](AllureReporter.md) by default), so the same log line
 ends up in the console, on disk, and in the test report all at once.
+
+Reporter registration is thread-local. Calling `setReporter` or `addReporter`
+in one parallel test thread does not change reporters used by another thread.
+Execution logs are written under `target/logs` with one file per thread.
 
 ## Related classes
 
@@ -26,8 +30,8 @@ LoggerUtil.warning("Retry limit reached, continuing anyway");
 LoggerUtil.error("Failed to save profile", exception);
 ```
 
-Switching reporters, for example to use TestNG's reporter instead of
-Allure:
+Switching reporters for the current thread, for example to use TestNG's
+reporter instead of Allure:
 
 ```java
 LoggerUtil.setReporter(new TestNgReporter());
@@ -49,8 +53,8 @@ LoggerUtil.setReporter(new NoOpReporter());
 
 | Method | Description |
 |---|---|
-| `static void setReporter(TestReporter)` | Replaces every registered reporter with a single one; pass `null` to attach to none. |
-| `static void addReporter(TestReporter)` | Adds an extra reporter alongside whatever is already registered. |
+| `static void setReporter(TestReporter)` | Replaces every reporter registered on the current thread with a single one; pass `null` to attach to none. |
+| `static void addReporter(TestReporter)` | Adds an extra reporter alongside whatever is already registered on the current thread. |
 | `static void info(String message)` | Logs an informational message. |
 | `static void warning(String message)` | Logs a warning message. |
 | `static void error(String message)` | Logs an error message with no exception. |

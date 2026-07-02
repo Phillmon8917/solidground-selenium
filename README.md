@@ -13,9 +13,13 @@ reporting across a suite.
 
 - **BasePage / ActionsContainer** — one base class every page object extends,
   building one instance of every action group.
+- **Shared auth state** - cache a logged-in browser session once and reuse it
+  across later WebDriver sessions.
 - **Modular actions** — element, browser, calendar, dropdown, iframe,
   keyboard, loading, mouse, network, reader (Excel/PDF/text/Word), toggle,
   wait, and assertions, each documented independently.
+- **Video recording** - record Chrome sessions through DevTools screencast and
+  keep recordings always or only when a test fails.
 - **SafeStep + FaultReporter** — a drop-in replacement for repetitive
   try/catch blocks around page-object steps.
 - **Env loading** — configuration from `.env`, environment variables, or
@@ -38,7 +42,8 @@ Add the dependency to your `pom.xml`:
 ```
 
 Requires Java 17 and a Selenium 4.x runtime (`selenium-java` /
-`selenium-devtools` are declared as `provided`, so bring your own version).
+`selenium-devtools-latest` are declared as `provided`, so bring your own
+version).
 
 ## Quick example
 

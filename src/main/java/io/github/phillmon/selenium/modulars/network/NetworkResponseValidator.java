@@ -3,10 +3,10 @@ package io.github.phillmon.selenium.modulars.network;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v142.network.Network;
-import org.openqa.selenium.devtools.v142.network.model.Request;
-import org.openqa.selenium.devtools.v142.network.model.RequestId;
-import org.openqa.selenium.devtools.v142.network.model.Response;
+import org.openqa.selenium.devtools.latest.network.Network;
+import org.openqa.selenium.devtools.latest.network.model.Request;
+import org.openqa.selenium.devtools.latest.network.model.RequestId;
+import org.openqa.selenium.devtools.latest.network.model.Response;
 
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -47,25 +47,43 @@ class NetworkResponseValidator {
      * point on. Expects a WebDriver that is actually a ChromeDriver.
      */
     NetworkResponseValidator(WebDriver driver) {
+        if (!(driver instanceof ChromeDriver)) {
+            throw new NetworkResponseValidationException(
+                    "Network validation requires a ChromeDriver-backed WebDriver (Chrome DevTools "
+                            + "Protocol is Chrome-only), but got: "
+                            + (driver == null ? "null" : driver.getClass().getName()));
+        }
         this.driver = driver;
-        this.devTools = ((ChromeDriver) driver).getDevTools();
 
-        devTools.createSession();
-        devTools.send(Network.enable(
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty()
-        ));
+        try {
+            this.devTools = ((ChromeDriver) driver).getDevTools();
 
-        devTools.addListener(Network.requestWillBeSent(), e ->
-                requests.put(e.getRequestId(), e.getRequest())
-        );
+            devTools.createSession();
+            devTools.send(Network.enable(
+                    Optional.empty(),
+                    Optional.empty(),
+                    Optional.empty(),
+                    Optional.empty(),
+                    Optional.empty()
+            ));
 
-        devTools.addListener(Network.responseReceived(), e ->
-                responses.put(e.getRequestId(), e.getResponse())
-        );
+            devTools.addListener(Network.requestWillBeSent(), e ->
+                    requests.put(e.getRequestId(), e.getRequest())
+            );
+
+            devTools.addListener(Network.responseReceived(), e ->
+                    responses.put(e.getRequestId(), e.getResponse())
+            );
+        } catch (LinkageError | RuntimeException e) {
+            throw new NetworkResponseValidationException(
+                    "Failed to open a Chrome DevTools Protocol session for network validation. "
+                            + "This library uses Selenium's selenium-devtools-latest artifact, which "
+                            + "tracks whichever CDP version shipped with the selenium-java release this "
+                            + "project depends on. If the installed Chrome is much newer than that "
+                            + "Selenium release, bump both the selenium-java and selenium-devtools-latest "
+                            + "dependency versions in this library's pom.xml to a more recent, matching pair.",
+                    e);
+        }
     }
 
     /**
