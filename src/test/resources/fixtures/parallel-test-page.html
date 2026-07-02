@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Parallel Test Fixture</title>
+</head>
+<body>
+    <input id="input-field" type="text" />
+    <select id="select-field">
+        <option value="one">One</option>
+        <option value="two">Two</option>
+        <option value="three">Three</option>
+    </select>
+    <input id="checkbox-field" type="checkbox" />
+    <button id="set-button" type="button"
+            onclick="document.getElementById('output').innerText =
+                document.getElementById('input-field').value + '|' +
+                document.getElementById('select-field').value + '|' +
+                document.getElementById('checkbox-field').checked;">
+        Set
+    </button>
+    <div id="output"></div>
+</body>
+</html>
